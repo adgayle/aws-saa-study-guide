@@ -1,6 +1,6 @@
 # AWS Solution Architect - Associate
 ## AWS Global Infrastructure
-* Ab Availability Zone (AZ) is one or more discrete data centers, each with redundant power, networking and connectivity housed in separate facilities
+* An Availability Zone (AZ) is one or more discrete data centers, each with redundant power, networking and connectivity housed in separate facilities
 * A Region is a physical location in the workd which consists of two or more Availability Zones (AZ)
 * Edge Locations are endpoints for AWS which are used for content caching. Typically consists of CloudFront, Amazon's Content Delivery Network (CDN)
 
