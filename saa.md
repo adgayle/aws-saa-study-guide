@@ -189,3 +189,92 @@ Compute service where you upload your code ad create functions as a service. Han
 * No servers
 * Continuous scaling out
 * Super cheap
+## VPC
+Logical datacenter in AWS
+* 1 subnet = 1 availability zone
+* Security groups are stateful
+* Security groups do not span VPCs
+
+* One internet gateway per VPC
+* Configure route tables between subnets
+* Launch EC2 into subnet of choice
+    * New NACL default is DENY everything
+    * Default NACL allows everything
+    * Can use one NACL for multiple subnets
+    * Rules are evaluted in numerical order (lowest first)
+    * Separate inbound and outbound rules
+    * Network Access Control Lists (NACLs) are stateless (must open ports directly, remember ephemeral ports)
+    * Allow ephemeral ports for outbound
+    Useful for blocking inbound traffic
+* Default VPC
+    * All subnets are Internet Accessible
+    * EC2 instances have public and private address
+* VPC flow logs allow you to capture the traffic sent within the VPC. It can be done at VPC, subnet or NIC level
+    * Cannot tag flow log
+    * Cannot enable flow logs on peer VPC unless it is in your account
+    * Cannot change the configuration of a flow log after creation
+    * Amazon core infrastructure (DNS, DHCP, etc.) is not included
+* VPC Peering
+    * Route traffic between VPC in same or different accounts
+    * No single point of failure or bandwidth limitations
+    * Cannot use the same or overlapping IP address (CIDR) block
+    * No transitive peering. Must be directly peered
+    * Cannot route direct connect of internet traffic. No edge routing
+* Nat Instances
+    * Replaced by more redundant NAT Gateway
+    * Must disable source and destination traffic checking so that it can forward traffic from other instances
+    * Must be in a public subnet
+    * Instance size if determined by traffic processed
+    * Must have a path from private subnet to NAT instance to get out
+* Bastion Hosts / Jump Boxes
+Used to securely administer EC2 instances in private subnets via SSH / RDP
+    * Must be hardened
+    Do not storage private keys use SSH Forwarding
+
+## S3
+### 101
+Key value based object store
+* S3 is object-based storage allows you to upload and download files
+* Files can be 0bytes - 5TB
+* There is unlimited storage available
+* Files are stored in buckets
+* S3 bucket names are universal. That is they must be unique globally
+* Link to file example https://s3-eu-west-1.amazonaws.com/acloudguru
+### Buckets
+* Universal namespace
+* Upload an object to S3 receive HTTP 200 code
+* Types
+    * S3 - Standard
+        * Availability 99.9%
+        * Durability 99.999999999% (11 9's)
+    * S3 - Infrequent Access
+        * Availability 99.9%
+        * Durability 99.999999999% (11 9's)
+        * Paid retrieval but quick
+        * 30 days old & minimum size charged 128KB to transfer from standard
+    * S3 - Reduced Redundancy Storage (S3 - One Zone Infrequent Access)
+        * Availability 99%
+        * Durability 99.999999999% (11 9's)
+        * Single AZ
+* Control access to buckets with either bucket ACL or bucket policy
+* By default buckets are privateand all objects stored inside them are private
+* Delete markers are replicated
+* Deleting individual versions or delete markers will not be replicated
+* You cannot replicate to multiple buckets or use a daisy chain
+### Cross Region Replication
+* Versioning must be enabled on source and target
+* Regions must be unique
+* Files existing in the bucket are not replicated automatically just new or updated files
+### Versioning
+* Storaes all version of an object (including all writes even if you delete the object)
+* Great for backups
+* Once enabled, versioning cannot be disable, only suspended
+* Integrates with lifecycle rules
+* Versioning has multi-factor integration to confirm deletes, providing additional security
+### Lifecycle Management
+* Can be used in conjunction with versioning
+* Can be applied to current and previous versions
+* Following actions can be done immediately
+    * Transitino to Standard - Infrequent Access storage class after 30 days
+    * Transition to Glacier storage class 30 days after Infrequent Access if relevant
+    * Permanently delete
