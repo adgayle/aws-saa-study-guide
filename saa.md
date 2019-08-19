@@ -126,3 +126,66 @@ Elastic Block Storage that is attached to EC2 instances
         * Unmount the volume
         * Shutdown the EC2 instance
 ## CloudWatch
+* Basic / Standard monitoring (5 minute interval / free tier)
+* Detailed monitoring ( 1 minute / paid service)
+* Can create dashboards and alarms (sent via SNS) which requires confirmation
+* EC2 metrics
+    * CPU
+    * Disk
+    * Network
+    * Status checks
+* CloudWatch events enable you to respond to state changes in AWS resources
+    * You can use lambda functions to respond to the state changes
+* CloudWatch Logs used to aggregate, monitor and store logs
+    * Requires an agent installed to send logs
+* Use scripts or CloudWatch Agent to send custom metrics
+
+## Security Groups
+* Up to 5 applied to each EC2 instance
+* All outbound allowed by default
+* All inbound blocked by default
+* Stateful
+* Changes are immediately effective
+* There is no deny just allow
+
+## Elastic Load Balancers (ELB)
+Load Balancers spread load across resources to provide services
+* Application Load Balancer (ALB)
+    * Layer 7 (application aware)
+    * Best suited for HTTP & HTTPS
+* Network Load Balancer (NLB)
+    * Best for TCP traffic where extreme performance is required
+    * Layer 4
+* Classic Load Balancer (being deprecated)
+    * Sticky sessions
+    * HTTP & HTTPS traffic
+    * Not recommended for new deployments
+    * 504 Gateway Timeout - means it is having a hard time reaching the down stream resource e.g. EC2 web application
+    * X-Forward-For header allows you to see the public IP address of the person making the request
+    * Use the DNS name as there is no public IP address released by AWS
+    * Layer 4 & 7 but not as advanced as the ALB
+
+## Elastic File System (EFS)
+* Storage capacity shrinks and grows as needed
+* Available over NFSv4
+* Can be shared across multiple EC2 instances
+* Scale to petabytes
+* Block based storage
+* Read after write consistency
+* EC2 must have the same security group as the EFS to mount the shared volume
+
+## Lambda
+Compute service where you upload your code ad create functions as a service. Handles scaling, operating systems, patching, etc. This is event driven or in response to HTTP requests
+* Lambda Languages
+    * C#, Node.js, Go, Java, Python, Ruby
+* Lambda Triggers
+    * API Gateway, IoT, Alexa Skills, Alexa Smart Home, CloudFront, CloudWatch Events, CloudWatch Logs, CodeCommit, Kinesis, Cognito Sync, S3, SNS, DynamoDB
+* Each call invokes a new Lambda function (1 event = 1 function)
+* Lambda functions can trigger another Lambda function(s)
+* Pricing
+    * Number of requests
+    * Duration of execution
+* Function cannot run for more than 15 minutes
+* No servers
+* Continuous scaling out
+* Super cheap
