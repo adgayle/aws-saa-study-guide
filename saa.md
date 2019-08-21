@@ -275,6 +275,39 @@ Key value based object store
 * Can be used in conjunction with versioning
 * Can be applied to current and previous versions
 * Following actions can be done immediately
-    * Transitino to Standard - Infrequent Access storage class after 30 days
+    * Transition to Standard - Infrequent Access storage class after 30 days
     * Transition to Glacier storage class 30 days after Infrequent Access if relevant
     * Permanently delete
+
+### Security and Encryption
+* New buckets are private
+* Send access logs to separate S3 bucket
+* Bucket policies are bucket wide vs. ACL which can go to the object level
+* Encryption
+    * Client side encryption
+    * Server side encryption
+        * Amazon S3 Managed Keys (SSE-S3)
+        * KMS (SSE-KMS)
+        * Customer Provided Keys (SSE-C)
+    * In Transit
+        * SSL/TLS
+
+## CloudFront Content Delivery Network
+* Edge location is the location where the content is cached. Separate from regions and AZ
+* Origin is all the files that the CDN will distribute. Can be S3 bucket, EC2 instances, ELB instance, Route53 or non aWS file store
+* Distribution is the name given to the CDN which consists of a collection of Edge locations
+* Edge locations can be written to (process uploads)
+* Objects are cached for a TTL
+* Cache can be cleared but there is a charge
+* Origin can be a folder in an S3 bucket
+* S3 buckets do not have to be public and can limit access to just the distribution with OAI
+* All HTTP methods are supported via the distribution including PUT and POST
+* Restrict view access via using signed URLs and signed cookies
+* Can further protect using WAF (Web Application Firewall)
+* CNAMES can be specified
+* Use OAI to access S3 origin and prevent everything else from accessing S3
+* SSL can be a custom certificate
+* Content can be restricted by Geography
+* Types of CDN
+    * RTMP / RTP for video streaming
+    * Static website hosting
