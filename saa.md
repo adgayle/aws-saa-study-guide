@@ -445,7 +445,7 @@ Online Analytical Processing (OLAP / Data Warehousing)
 * Scales to 32 CPU / 244GB
 * Keeps 2 copies in each AZ across 3 AZ
 
-## SQS
+## Simple Queuing Service (SQS)
 Distributed queue system for message awaiting processing (always a pull based system)
 * Great way to decouple applications components
 * Messages can contain up to 256KB of data
@@ -460,7 +460,7 @@ Distributed queue system for message awaiting processing (always a pull based sy
     * FIFO queue - guaranteed ordering
         * Limited to 300 transactions / second
 
-## SWF
+## Simple Work Flow (SWF)
 Coordinates work across distributed application components
 * Workers (can be human) are programgs that interact with SWF to get tasks, process received tasks and return results
     * Tasks are assigned only once and never duplicated
@@ -474,7 +474,7 @@ Coordinates work across distributed application components
     * Deciders - flow control
     * Activity - task doer
 
-## SNS
+## Simple Notification Service (SNS)
 Setup operate and publish/push messages from the cloud to subscribers via topics or other applications
 * Text (SMS), email, SQS, Lambda or HTTP endpoint
 * Instant push no polling
@@ -490,3 +490,76 @@ Managed service to publish, maintain, monitor and secure APIs at scale
 * Web pages need the same origin policy so use cross-origin resource sharing (CORS) to address
 * Throttle requests to prevent attacks
 * Log results using CloudWatch Logs
+
+## Kinesis
+Streaming data has generated continuously from thousands of sources, sending small data records simultaneously (stock prices, social network data, etc.)
+* Makes it easy to analyze and process streaming data
+* Producers send data to streams which are then access to by consumers
+* Great way to bring big data (news logs, social media feeds) into the AWS cloud for consumption by RedShift for business intelligence or Elastic Map Reduce for big data processing
+* Course services
+    * Streams.
+        * 24 hour default to seven day retention
+        * Uses shards
+    * Firehose
+        * No automatic data retention
+        * Analysed and or sent to another device
+        * Sends data to S3
+        * No need to worry about consumers
+        * No shards
+    * Analytics
+        * Run SQL queries of data in Kinesis.
+
+## Elastic Container Service (ECS)
+Build, test and deploy applications quickly using containers
+* Highly reliable
+* Infinitely scalable
+* Standardized into containers
+* Smaller than virtualization (no redundant software needed so higher density)
+* Benefits
+    * Consistent delivery
+    * No worries about dependencies as they are bundled in the container
+    * Better resource management
+    * Very portable
+    * Microservice
+* Components
+    * Docker image (readonly)
+    * Docker container (launched from the image)
+    * Layers / Union File System
+    * Dockerfile
+    * Docker engine
+    * Docker client
+    * Docker registry / Store / Hub
+* Amazon EC2 Container Registry (ECR) is the AWS Docker Registry
+* Task definitions
+    * Required to run Docker containers
+    * Task definitions contain instructions
+    * Parameters for running CPU, memory, links to other containers
+    * JSON format
+    * Network Configuration
+    * Startup commands for application
+    * Environmental variables
+* Auto scales if a task fails
+* ECS Clusters
+    * Default cluster provided per region
+    * Contains different instance types
+    * Only one cluster
+    * IAM restricts access
+* ECS Scheduler
+    * Handles ELB registration
+    * Container agent installed automatically on special ECS AMI (no windows)
+    * EC2 instances use IAM roles to access ECS etc.
+    * Access to EC2 for ECS is allowed
+
+## Workspaces
+AWS virtual desktop infrastructure integrated with active directory for authentication
+* Accessible from Windows, PC, iPAD, etc.
+* Windows 7
+* Can be personalized
+* Local administrator available
+* Persistent
+* D:\ automatically backed up every 12 hours
+* No AWS account needed
+
+## Active Directory Integration
+* SAML authentication supported
+* ADFS -> AD -> SAML -> AssumeRolewithSAML -> Teporary credentials assigned
