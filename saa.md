@@ -140,6 +140,11 @@ Elastic Block Storage that is attached to EC2 instances
     * Requires an agent installed to send logs
 * Use scripts or CloudWatch Agent to send custom metrics
 
+## CloudTrail
+* Per AWS account and per region (recommended to enabled in all)
+* Consolidate to S3 for paying account or dedicated account for logs
+* Can log all API calls to AWS (since everything uses an API call)
+
 ## Security Groups
 * Up to 5 applied to each EC2 instance
 * All outbound allowed by default
@@ -231,6 +236,14 @@ Used to securely administer EC2 instances in private subnets via SSH / RDP
     * Must be hardened
     Do not storage private keys use SSH Forwarding
 
+## Direct Connect
+Dedicated network line from on premise / co-location to AWS
+* Reduces data costs
+* Increases reliability
+* Increases bandwidth
+* 1GBps - 10GBps
+* Takes time to implement the circuit
+
 ## S3
 ### 101
 Key value based object store
@@ -305,6 +318,22 @@ User to archive data with paid retrieval
         * Customer Provided Keys (SSE-C)
     * In Transit
         * SSL/TLS
+
+## Security Token Service
+Provides limited temporary access to AWS resources
+* Via federation typicall Active Directory
+* No IAM user needed
+* Uses SAML
+* Identity broker - Service that allows you to take identity from point A and federate or join it to point B
+* Identity store - think AD, Facebook or Google login stores
+* Identities - user of a service
+Provides
+* Access key
+* Secret key
+* Duration - time authentication is valid
+* Token
+Sequence of events
+* User -> Application -> Identity Broker -> Identity Store (LDAP) -> AWS STS -> Application -> AWS Service -> AWS IAM -> Temporary access to AWS service
 
 ## CloudFront Content Delivery Network
 * Edge location is the location where the content is cached. Separate from regions and AZ
@@ -474,6 +503,11 @@ Coordinates work across distributed application components
     * Deciders - flow control
     * Activity - task doer
 
+## OpsWorks
+* Orchestration service using Chef or Puppet
+* Chef cookbooks & recipes
+* Puppet manifests
+
 ## Simple Notification Service (SNS)
 Setup operate and publish/push messages from the cloud to subscribers via topics or other applications
 * Text (SMS), email, SQS, Lambda or HTTP endpoint
@@ -563,3 +597,43 @@ AWS virtual desktop infrastructure integrated with active directory for authenti
 ## Active Directory Integration
 * SAML authentication supported
 * ADFS -> AD -> SAML -> AssumeRolewithSAML -> Teporary credentials assigned
+
+## AWS Organizations (All features or consolidated billing)
+Account management service that enables you to consolidate multiple AWS accounts to centrally manage them via policies
+* Automate AWS account creation and management
+* Control access to AWS Services (service control polices)
+* Consolidate billing
+    * Paying account manages linked accounts at the organization level broken out by accounts
+    * Linked accounts are independent (20 limit)
+    * Volume pricing
+    * Easier to track charges
+    * Reserved EC2 instances
+        * Will use all available reserved instances in the linked accounts before going to on demand pricing
+* Always multifactor root account with strong & complex password
+* Paying account for billing only no resource deployment
+* Enable monitoring on the paying account for billing alerts to include all linked account data
+* Manage all features
+* Organizations unites which you can apply policies to
+
+## AWS Support
+* Basic
+* Developer
+* Business
+* Enterprise
+
+## Cross Account Access
+* Work productively in multiple AWS accounts
+* Users groups, roles and policies to achieve
+* Needs both account numbers
+
+## Tagging
+* Uses key value pairs
+* Is metadata for resources
+* Tags can be inherited
+* Case sensitive
+* Very important for pricing allocation
+
+## Resouce Groups
+* Makes it easy to group resources based on tags assigned e.g. Region, Name or Project
+* Classic Resource Groups are global
+* AWS Systems Manager Groups are per region and you can run commands against them 
