@@ -261,6 +261,13 @@ Key value based object store
 * Delete markers are replicated
 * Deleting individual versions or delete markers will not be replicated
 * You cannot replicate to multiple buckets or use a daisy chain
+### Glacier
+User to archive data with paid retrieval
+* 30 days after IA or 1 day after S3
+* Retrieval types
+    * Expedited
+    * Standard
+    * Bulk
 ### Cross Region Replication
 * Versioning must be enabled on source and target
 * Regions must be unique
@@ -278,7 +285,14 @@ Key value based object store
     * Transition to Standard - Infrequent Access storage class after 30 days
     * Transition to Glacier storage class 30 days after Infrequent Access if relevant
     * Permanently delete
-
+### Transfer Acceleration
+* Uses CloudFront Edge locations to speed up file transfers with S3
+* Uses new URL e.g. bucketname.s3.accelerate.amazonaws.com
+### Static Websites
+* Policy to make the entire bucket public
+* Websites that require database access cannot be hosted with S3 (unless you make calls to the API Gateway and Lamda)
+* Scales automatically
+* Sample URL bucketname.s3-websie-us-east-1.amazonaws.com (for website enabled)
 ### Security and Encryption
 * New buckets are private
 * Send access logs to separate S3 bucket
@@ -311,3 +325,122 @@ Key value based object store
 * Types of CDN
     * RTMP / RTP for video streaming
     * Static website hosting
+
+## Snowball
+Used to move large amounts of data in and out of AWS (mostly S3).  Replaced the Import/Export service that had customers send in their own disks (chaos of types and connections)
+* Snowball
+    * Petabyte scale suitcase for moving data
+    * Simple, fast and secure. Scrubbed by AWS
+* Snowball Edge
+    * Adds compute capacity via Lambda functions
+    * Storage and compute builtin
+* Snowmobile
+    * Trucksize Snowball
+
+## Route 53
+### 101
+Translates IP addresses to human readable friendly names and vice versa
+* ELBs provide names and never IP addresses
+* Alias records can be used with naked domain names and CNAME records cannot e.g. m.example.com can have an ALIAS of example.com but not a CNAME
+* ALIAS records are better / faster because AWS automatically reflects ELB IP address changes
+### Policies
+* Simple Routing
+    * Returns all the IP addresses in the policy in random order
+* Weighted Routing
+    * Returns the IP address response based on a weighted / fractional value specified
+    * Multiple records
+* Latency Routing
+    * Records created per region
+    * DNS query determines which regions have records and which region has the lowest latency to the region
+* Failover Routing
+    * Used for Active / Passive setups
+    * Uses health check to validate the primary / active node health
+    * Returns the IP address of the passive node when the active node health check fails
+* Geolocation Routing
+    * Routed by location in the world you are coming from
+* Multivalue Routing
+    * Randomly returns multiple IP addresses up to 8 so if the first is not available the client software will try the rest
+
+## Databases
+### 101
+* RDS (OLTP) - Relational DB Types - Tables, rows, fields
+    * MySQL
+    * MS SQL Server
+    * Oracle
+    * Aurora
+    * MariaDB
+    * PostgreSQL
+* NoSQL/JSON
+    * DynamoDB
+* RedShift (Data Warehousing)
+* Elasticache (In memory caching)
+    * In memory caching used to deploy, operate and scale performance of web applications
+        * Memcache
+        * Redis
+### RDS
+* Automated backups
+    * Enabled by default
+    * Restore to any point (to a second) within retention period
+    * Retention period 1-35 days
+    * Daily snapshots & transaction logs
+    * Backups free to the size of the database
+    * Stored in S3
+    * IO suspended during backup window
+    * Customer sets backup window
+    * Deleted when you delete the DB (take a user initiated backup i.e. a snapshot to preserve a database copy)
+* Snapshots
+    * User initiated
+    * Stored until you delete it
+* Restores
+    * Creates a new database with new name
+* Encryption at rest with KMS
+    * To encrypt copy the snapshot with the encryption enabled then restore the snapshot to a new database
+* Replication
+    * Multi-AZ replicates the database synchronously to another AZ
+    * Primary failures move the name to the secondary database in the next AZ automatically as a part of the failover process
+        * Used for HA
+        * Supported by Aurora, SQL Server, MySQL, PostgreSQL, MariaDB & Oracle
+        * Supports read replicas
+        * Single endpoint name (see automatic name move)
+    * Read replicas
+        * Replicated synchronously
+        * Send read requests to read replicas to improve performance
+        * Not for DR
+        * Up to 5 replicas
+        * Automated backups must be enabled
+        * Supported by MySQL, MariaDB, PostgreSQL & Aurora
+        * Can also have read replicas but watch latency
+        * Each replica has unique endpoint name
+        * Can be prompted to master (must rebuild replication out manually)
+### DynamoDB
+NoSQL database
+* Name value pair must not exceed 400KB
+* Millisecond access times
+* SSD Storage
+* 3 disctince facilities in each region
+* Eventually consistent model (default and best performance)
+* Strongly consistent model available (use when read required 1 second after write)
+* Expensive for large number of writes, cheap for large number of reads
+* Read / Write capacity units is the important metric. Scales dynamically as you make the changes
+* Query non-primary key attributes using secondary indices
+* Scales to unlimited but above 10000 write / read capacity unites call AWS support
+### RedShift
+Online Analytical Processing (OLAP / Data Warehousing)
+* Single node
+* Multi node
+    * Leader node - client connection
+    * Compute nodes
+* Columnar data storage reduces IO
+* Charged for compute nodes, data transfer and backup
+* Encrypted in transit via SSL
+* Handles own keys or via KMS
+### Elasticache
+* Great for reducing read stress on a database that is not changing frequently
+* Memcache is a single AZ solution
+* Redis can be multi-AZ
+### Aurora
+* MySQL & PostgreSQL compatible
+* Commercial DB at minimal cost
+* Scales to over 10TB
+* Scales to 32 CPU / 244GB
+* Keeps 2 copies in each AZ across 3 AZ
