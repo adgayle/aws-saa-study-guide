@@ -444,3 +444,49 @@ Online Analytical Processing (OLAP / Data Warehousing)
 * Scales to over 10TB
 * Scales to 32 CPU / 244GB
 * Keeps 2 copies in each AZ across 3 AZ
+
+## SQS
+Distributed queue system for message awaiting processing (always a pull based system)
+* Great way to decouple applications components
+* Messages can contain up to 256KB of data
+* Messages can stay from 1 minute to 14 days (default is 4 days)
+* Visibility timeout is the amount of time a message is hidden from the queue after being picked up for processing
+* Default visibility timeout is 30 seconds with a maximum of 12 hours. Configure based on the time to process each message
+* Messages will be processed at least once
+* Short polling returns immediately even when no messages are in the queue
+* Long polling checks periodically and only returns a response when a message exists or timeout is reached
+* Queue types
+    * Standard queue - best effort ordering
+    * FIFO queue - guaranteed ordering
+        * Limited to 300 transactions / second
+
+## SWF
+Coordinates work across distributed application components
+* Workers (can be human) are programgs that interact with SWF to get tasks, process received tasks and return results
+    * Tasks are assigned only once and never duplicated
+* Deciders are programs that control the coordination of tasks and scheduling accoring to the application logic
+* Workflow starters initiate the workflow
+* Workflows are scoped in a domain for isolation from other tasks and executions within the same account
+* Maximum workflow duration is 1 year measured in seconds
+* Related workflows are grouped into domains which need to be registered
+* Actors
+    * Workflow starters - initiators
+    * Deciders - flow control
+    * Activity - task doer
+
+## SNS
+Setup operate and publish/push messages from the cloud to subscribers via topics or other applications
+* Text (SMS), email, SQS, Lambda or HTTP endpoint
+* Instant push no polling
+
+## Elastic Transcoder
+Converts media files from one format to another for playing on various platforms (PC, mobile phones, tablets, etc.)
+* Intelligence built in to determine best format for target device
+* Billed per minute and resolution of video output
+
+## API Gateway
+Managed service to publish, maintain, monitor and secure APIs at scale
+* API caching improves performance by storing response for a specified TTL
+* Web pages need the same origin policy so use cross-origin resource sharing (CORS) to address
+* Throttle requests to prevent attacks
+* Log results using CloudWatch Logs
