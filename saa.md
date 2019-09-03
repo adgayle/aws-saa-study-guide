@@ -636,4 +636,103 @@ Account management service that enables you to consolidate multiple AWS accounts
 ## Resouce Groups
 * Makes it easy to group resources based on tags assigned e.g. Region, Name or Project
 * Classic Resource Groups are global
-* AWS Systems Manager Groups are per region and you can run commands against them 
+* AWS Systems Manager Groups are per region and you can run commands against them
+
+## Well Architected Framework
+### Business Benefits
+* Zero upfront infrastructure investment
+* Just in time infrastructure
+* More efficient resource utilization
+* Usage based costing
+* Reducted time to market
+
+### Technical Benefits
+* Scriptable infrastructure for automation aka. Infrastructure as Code
+* Auto-scaling
+* Proactive scaling
+* Efficient development lifecycle
+* Improved testability
+* Disaster recovery and business continuity
+* Overflow traffic to the cloud
+
+### Design Principles
+* Design for failure
+* Decouple the components think SQS
+* Elasticity (time-based, event-based or auto-scaling metric based)
+
+### General Principles
+* Stop guessing capacity
+* Test systems at production scale (quick & cheap with cloud)
+* Automate to make experimentation easier
+* Allow for evolutionary architectures
+* Data-driven architectures
+* Simulate important days for testing
+
+### 5 pillars of Architecture
+* Operational Excellence
+    * Automate change execution and responses
+    * Plan changes and account for operational events
+    * Perform operations with code
+    * Align operations to business objectives
+    * Make regular small incremental changes
+    * Test for response to unexpected events
+    * Learn from past events and failures
+    * Keep standard operating procedures updated
+    * Standardize and automate operations
+    * Avoid downtime and large changes
+    * Centralize and automate monitoring
+* Cost optimization
+    * Use to reduce operating costs to a minimum and use the cost savings for other business activity
+    * Transparent assignment of cost for clear expenditure allocation
+    * Use managed services to reduce cost of ownership
+    * Trade capital expense for operating expense
+    * Benefit from the economies of scaale (in short use the cloud)
+    * Stop spending on data center operations (see economies of scale)
+    * Definition
+        * Match supply to demand (serverless, autoscaling)
+        * Use cost effective resources
+        * Expenditure awareness (provision in seconds, use tags to track costs, turn off what is not in use, budgets and billings alerts)
+        * Optimizing over time (investigate new services and resources to see if it works better for you)
+* Security
+    * Apply security at all levels
+    * Enable traceability
+    * Automate responses to security events
+    * Focus on securing your system (shared responsibility model)
+    * Automate security best practices
+    * Definition
+        * Data protection
+            * Versioning
+            * Never moves the data to other regions without your permission
+            * Encrypt at rest and in motion
+            * Rotate keys
+        * Privilege management
+            * Role-based access
+            * Access Control Lists
+            * Password management policies
+            * Multifactor Authentication is a must
+        * Infrastructure protection
+            * Secure the VPC
+            * AWS handles the physical infrastructure protection
+        * Detective controles
+            * Use AWS Config, CloudTrail and CloudWatch
+* Performance Efficiency
+    * Using compute resources efficiently to meet requirements
+        * Democratize advanced technologies
+        * Go global in minutes
+        * Use serverless architectures
+        * Experiment more often
+        * Definition
+            * Compute
+            * Storage
+            * Database
+            * Space-time tradeoff
+* Reliability
+    * System recovers from infrastructure failure or service disruption
+        * Test recovery
+        * Automatically recover from failure
+        * Scale horizontally to increase availability
+        * Stop guessing capacity
+    * Definition
+        * Foundations - think service limits
+        * Change management - effect on application and infrastructure
+        * Failure management - assume everything will fail
