@@ -194,6 +194,7 @@ Compute service where you upload your code ad create functions as a service. Han
 * No servers
 * Continuous scaling out
 * Super cheap
+
 ## VPC
 Logical datacenter in AWS
 * 1 subnet = 1 availability zone
@@ -251,8 +252,11 @@ Key value based object store
 * Files can be 0bytes - 5TB
 * There is unlimited storage available
 * Files are stored in buckets
+* File names are the keys and the file data are the objects
 * S3 bucket names are universal. That is they must be unique globally
-* Link to file example https://s3-eu-west-1.amazonaws.com/acloudguru
+* Link to file example https://s3-eu-west-1.amazonaws.com/mybucket-986
+* New object creation is strongly consistent
+* Deletes and overwrites of objects are eventually consistent
 ### Buckets
 * Universal namespace
 * Upload an object to S3 receive HTTP 200 code
@@ -260,37 +264,51 @@ Key value based object store
     * S3 - Standard
         * Availability 99.9%
         * Durability 99.999999999% (11 9's)
+    * S3 - Intelligent Tiering
+        * Uses ML to anaaylze object use and apply the best storage class based on cost and access frequency 
     * S3 - Infrequent Access
         * Availability 99.9%
         * Durability 99.999999999% (11 9's)
         * Paid retrieval but quick
+        * Cheap if you access less than once per month
         * 30 days old & minimum size charged 128KB to transfer from standard
-    * S3 - Reduced Redundancy Storage (S3 - One Zone Infrequent Access)
+    * S3 - One Zone Infrequent Access
         * Availability 99%
         * Durability 99.999999999% (11 9's)
         * Single AZ
-* Control access to buckets with either bucket ACL or bucket policy
-* By default buckets are privateand all objects stored inside them are private
+        * Paid retrieval
+* Control access to buckets with either bucket ACL or bucket policy (JSON granular)
+* By default buckets are private and all objects stored inside them are private
 * Delete markers are replicated
 * Deleting individual versions or delete markers will not be replicated
 * You cannot replicate to multiple buckets or use a daisy chain
+* Presigned URL are created with the CLI and grant temporary timed access to an object or objects
 ### Glacier
-User to archive data with paid retrieval
+#### S3 - Glacier
+User to archive (backup) data with paid retrieval
 * 30 days after IA or 1 day after S3
+* Takes minutes to hours to retrieve data
 * Retrieval types
     * Expedited
     * Standard
     * Bulk
+#### S3 - Glacier Deep Archive
+* Super cheap
+* Retrieval time of 12 hours
 ### Cross Region Replication
 * Versioning must be enabled on source and target
 * Regions must be unique
 * Files existing in the bucket are not replicated automatically just new or updated files
 ### Versioning
-* Storaes all version of an object (including all writes even if you delete the object)
+* Stores all version of an object (including all writes even if you delete the object)
 * Great for backups
+* If the current version is deleted the previous version is presented as the object
+* You can apply permissions per version
 * Once enabled, versioning cannot be disable, only suspended
 * Integrates with lifecycle rules
-* Versioning has multi-factor integration to confirm deletes, providing additional security
+* Versioning has multi-factor (MFA) integration to confirm deletes, providing additional security
+    * Only the root account using the CLI can delete the object  with MFA enabled
+    * MFA delete can only be enabled from the CLI
 ### Lifecycle Management
 * Can be used in conjunction with versioning
 * Can be applied to current and previous versions
@@ -300,6 +318,7 @@ User to archive data with paid retrieval
     * Permanently delete
 ### Transfer Acceleration
 * Uses CloudFront Edge locations to speed up file transfers with S3
+* Uses AWS backbone to speed up upload once it reaches CloudFront
 * Uses new URL e.g. bucketname.s3.accelerate.amazonaws.com
 ### Static Websites
 * Policy to make the entire bucket public
@@ -308,12 +327,12 @@ User to archive data with paid retrieval
 * Sample URL bucketname.s3-websie-us-east-1.amazonaws.com (for website enabled)
 ### Security and Encryption
 * New buckets are private
-* Send access logs to separate S3 bucket
+* Send access logs to separate S3 bucket for object requests
 * Bucket policies are bucket wide vs. ACL which can go to the object level
 * Encryption
     * Client side encryption
     * Server side encryption
-        * Amazon S3 Managed Keys (SSE-S3)
+        * Amazon S3 Managed Keys (SSE-S3 / SSE-AES256)
         * KMS (SSE-KMS)
         * Customer Provided Keys (SSE-C)
     * In Transit
@@ -356,15 +375,20 @@ Sequence of events
     * Static website hosting
 
 ## Snowball
-Used to move large amounts of data in and out of AWS (mostly S3).  Replaced the Import/Export service that had customers send in their own disks (chaos of types and connections)
+Used to move large amounts of data in and out of AWS (mostly S3 and Glacier).  Replaced the Import/Export service). Convenient way to tranfer 100 TB to S3 in a week or less.
 * Snowball
     * Petabyte scale suitcase for moving data
     * Simple, fast and secure. Scrubbed by AWS
+    * 50 (42) TB or 80 (72) TB
 * Snowball Edge
     * Adds compute capacity via Lambda functions
     * Storage and compute builtin
+    * 100 (83) TB (45) clustered
+    * 5 to 10 devices per cluster
+    * Options for storage (24 vCPU), compute (54 vCPU) or GPU (54 vCPU) optimized
 * Snowmobile
     * Trucksize Snowball
+    * 100 PB
 
 ## Route 53
 ### 101
