@@ -82,6 +82,7 @@ Amazon Elastic Compute Cloud reduces the time required to obtain and boot new se
     * Used to separate instances of the same application on different hardware
     * Can span multiple AZs
     * Cannot be merged nor moved into a new placement group
+
 ## Auto Scaling
 * Launch configuration speicifies the AMI, Instance size, IAM role, bootstrap script, etc. Answers the question of what each EC2 instance launched should look like
 * Autoscaling group specifies how many instances are launched, which network they are launched in and in which subnet (it applies this intelligently). Specifically a load balancer, health check and grace period. Also apply scaling policies beyond the initial settings for growning and shrinking. Notifications can be sent via SNS for launch, terminate and associated failures
@@ -145,14 +146,6 @@ Elastic Block Storage that is attached to EC2 instances
 * Consolidate to S3 for paying account or dedicated account for logs
 * Can log all API calls to AWS (since everything uses an API call)
 
-## Security Groups
-* Up to 5 applied to each EC2 instance
-* All outbound allowed by default
-* All inbound blocked by default
-* Stateful
-* Changes are immediately effective
-* There is no deny just allow
-
 ## Elastic Load Balancers (ELB)
 Load Balancers spread load across resources to provide services
 * Application Load Balancer (ALB)
@@ -200,42 +193,79 @@ Logical datacenter in AWS
 * 1 subnet = 1 availability zone
 * Security groups are stateful
 * Security groups do not span VPCs
-
 * One internet gateway per VPC
 * Configure route tables between subnets
 * Launch EC2 into subnet of choice
-    * New NACL default is DENY everything
-    * Default NACL allows everything
-    * Can use one NACL for multiple subnets
-    * Rules are evaluted in numerical order (lowest first)
-    * Separate inbound and outbound rules
-    * Network Access Control Lists (NACLs) are stateless (must open ports directly, remember ephemeral ports)
-    * Allow ephemeral ports for outbound
-    Useful for blocking inbound traffic
-* Default VPC
-    * All subnets are Internet Accessible
-    * EC2 instances have public and private address
-* VPC flow logs allow you to capture the traffic sent within the VPC. It can be done at VPC, subnet or NIC level
-    * Cannot tag flow log
-    * Cannot enable flow logs on peer VPC unless it is in your account
-    * Cannot change the configuration of a flow log after creation
-    * Amazon core infrastructure (DNS, DHCP, etc.) is not included
-* VPC Peering
-    * Route traffic between VPC in same or different accounts
-    * No single point of failure or bandwidth limitations
-    * Cannot use the same or overlapping IP address (CIDR) block
-    * No transitive peering. Must be directly peered
-    * Cannot route direct connect of internet traffic. No edge routing
-* Nat Instances
-    * Replaced by more redundant NAT Gateway
-    * Must disable source and destination traffic checking so that it can forward traffic from other instances
-    * Must be in a public subnet
-    * Instance size if determined by traffic processed
-    * Must have a path from private subnet to NAT instance to get out
-* Bastion Hosts / Jump Boxes
-Used to securely administer EC2 instances in private subnets via SSH / RDP
-    * Must be hardened
-    Do not storage private keys use SSH Forwarding
+
+### Network Access Control Lists (NACL)
+* New NACL default is DENY everything
+* Default NACL allows everything
+* Can use one NACL for multiple subnets
+* Subnet can only have 1 NACL at a time and must have one, default is assigned if none assigned
+* Rules are evaluted in numerical order (lowest first)
+* Separate inbound and outbound rules
+* Has DENY rule which 
+* Network Access Control Lists (NACLs) are stateless (must open ports directly, remember ephemeral ports)
+* Allow ephemeral ports for outbound
+* Useful for blocking inbound traffic
+
+### Security Groups
+* Acts as a firewall at the instance level
+* Up to 16 per ENI (default 5)
+    * 60 inbound and 60 outbound rules per security group
+    * 10000 security groups per region (default 2500)
+* Can allow IP, IP range or another security group
+* All outbound allowed by default
+* All inbound blocked by default (no rule)
+* Stateful (allowed inbound traffic is also allowed to return out)
+* Changes are immediately effective
+* There is no deny just allow
+* Allows take precedence
+
+### Default VPC
+* All subnets are Internet Accessible
+* EC2 instances have public and private address
+
+### VPC flow logs 
+* Allow you to capture the traffic sent and recieved by NIC within the VPC
+* Stores the source and destination IP addresses
+* Can be done at VPC, subnet or NIC level
+* Cannot tag flow log
+* Cannot enable flow logs on peer VPC unless it is in your account
+* Cannot change the configuration of a flow log after 
+* Can be sent to either S3 or CloudWatch Logs
+* Amazon core infrastructure (DNS, DHCP, Windows license, metadata address, etc.) is not included
+
+### VPC Peering
+* Route traffic between VPC in same or different accounts
+* No single point of failure or bandwidth limitations
+* Cannot use the same or overlapping IP address (CIDR) block
+* No transitive peering. Must be directly peered
+* Cannot route direct connect of internet traffic. No edge routing
+
+### Nat Instances
+* Replaced by redundant NAT Gateway (paid AWS managed service per AZ)
+* Must disable source and destination traffic checking so that it can forward traffic from other instances
+* Must be in a public subnet
+* Instance size if determined by traffic processed
+* Must have a path from private subnet to NAT instance to get out
+
+### Bastion Hosts / Jump Boxes
+* Used to securely administer EC2 instances in private subnets via SSH / RDP
+* Must be hardened
+* Do not store private keys use SSH Forwarding
+
+### VPC Endpoints
+* Keep traffic for AWS services with the AWS network
+* Two types
+    * Interface endpoint
+        * Costs money
+        * Uses an Elastic Network Interface (ENI) with private IP (Powered by AWS PrivateLink)
+        * Supports many AWS services
+    * Gateway endpoint
+        * Free
+        * Route table entry
+        * Supports with S3 and DynamoDB
 
 ## Direct Connect
 Dedicated network line from on premise / co-location to AWS
