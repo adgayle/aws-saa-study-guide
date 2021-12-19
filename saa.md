@@ -457,25 +457,48 @@ Used to move large amounts of data in and out of AWS (mostly S3 and Glacier).  R
 
 ## Route 53
 ### 101
-Translates IP addresses to human readable friendly names and vice versa
+Domain Name System (DNS) translates IP addresses to human readable friendly names and vice versa
+* IPv4 32-bit address space
+* IPv6 64-bit address space
+* Name servers have the DNS records for a domain
+* Domain registrar 3rd party used to register domains
+* Start of Authority (SOA) contains information about the DNS zone and associated records
 * ELBs provide names and never IP addresses
+* A records convert directly to an IP address
+* CNAME records convert to another name which can then be converted to an IP address
+* Time to Live (TTL) is the time the DNS record will be cached for. Reduce the TTL to propagate changes quickly
 * Alias records can be used with naked domain names and CNAME records cannot e.g. m.example.com can have an ALIAS of example.com but not a CNAME
-* ALIAS records are better / faster because AWS automatically reflects ELB IP address changes
+* Alias records are better / faster because AWS automatically reflects ELB IP address changes
+* Alias records can point directly to AWS resources by name and automatically gets updated
+* Uses health checks to determine if your application is healthy and use that in routing traffic
+
+### Route53 Resolver
+Used in hybrid environments to route DNS queries between your VPC and on premise networks
+* Inbound and outbound
+* Inbound only allows queries into your VPC based on an endpoint
+* Outbound allows queries to your on premise network
+
 ### Policies
-* Simple Routing
+Traffic flow visual editor allows you to create different policies and version them
+* Simple Routing (default)
     * Returns all the IP addresses in the policy in random order
+    * Single or multiple IP addresses
 * Weighted Routing
     * Returns the IP address response based on a weighted / fractional value specified
     * Multiple records
+    * Blue / Green deployments to send fractional amounts or traffick
 * Latency Routing
     * Records created per region
-    * DNS query determines which regions have records and which region has the lowest latency to the region
+    * DNS query determines which regions have records and which region has the lowest latency for the requester
 * Failover Routing
     * Used for Active / Passive setups
     * Uses health check to validate the primary / active node health
     * Returns the IP address of the passive node when the active node health check fails
 * Geolocation Routing
     * Routed by location in the world you are coming from
+* Geoproximity Routing
+    * Can only be created by Traffic Flow editor
+    * You can create proximities around each region and then set boundaries for routing to each region
 * Multivalue Routing
     * Randomly returns multiple IP addresses up to 8 so if the first is not available the client software will try the rest
 
@@ -495,6 +518,7 @@ Translates IP addresses to human readable friendly names and vice versa
     * In memory caching used to deploy, operate and scale performance of web applications
         * Memcache
         * Redis
+
 ### RDS
 * Automated backups
     * Enabled by default
