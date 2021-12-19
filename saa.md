@@ -6,8 +6,8 @@
 
 ## IAM
 ### 101
-* Centralized control of AWS account
-* Shared access to AWS account
+* Manages access to users and resources in an AWS account
+* Allows for shared access to the AWS account by multiple users
 * Granular permissions
 * Identity Federation (Active Directory,  Facebook, LinkedIn, etc.)
 * Multi-factor authentication (enable at least for root account)
@@ -18,12 +18,30 @@
 
 ### Authorization and Authentication
 * Users, Groups, Roles, Policy Documents (JSON)
-* Universal so region independent
+* Universal so not region independent
 * Root account has complete access
 * New users have no access
-* Programmatic access via Access Key ID and Secret Access Key. Shared only at creation so save them for SDK, CLI and API use
+* Programmatic access via Access Key ID and Secret Access Key. Shared only at creation so save them for SDK, CLI and API use. Cannot be used for console access.
 * Console access via user and password
 * Multi-factor and password policy can be enabled
+    * Always enabled MFA for root user
+    * Users have to enabled their own MFA
+* Use groups to organize access
+* Roles can be assigned to users or groups
+* IAM policies are JSON documents granting permissions to users to access resources
+* Managed policies are created by AWS and cannot be edited
+* Customer policies are created by the customer
+* Inline policies are attached directly to the user
+
+## Cognito
+Decentralized managed authentication system for your mobile, desktop or web application
+* User pools allows users to authenticate using an OAuth iDP (identity Provider) e.g. Google to give access to your web applications
+    * Uses JWT to persist authentication
+* Identity pools provide temporary AWS credentials to access services e.g. S3
+* Cognito Sync can sync user data across multiple devices (based on SNS)
+* Web Identity Federation exchanges identity and security information between th iDP and the application
+* OIDC type of identity provider which uses OAuth
+* SAML type of identity provider which is used for SSO (Single Sign-on)
 
 ## EC2
 Amazon Elastic Compute Cloud reduces the time required to obtain and boot new server instances. Scale up and down quickly. Pay only for what you need.
@@ -126,6 +144,7 @@ Elastic Block Storage that is attached to EC2 instances
         * Freeze the file system
         * Unmount the volume
         * Shutdown the EC2 instance
+
 ## CloudWatch
 * Basic / Standard monitoring (5 minute interval / free tier)
 * Detailed monitoring ( 1 minute / paid service)
@@ -287,6 +306,7 @@ Key value based object store
 * Link to file example https://s3-eu-west-1.amazonaws.com/mybucket-986
 * New object creation is strongly consistent
 * Deletes and overwrites of objects are eventually consistent
+
 ### Buckets
 * Universal namespace
 * Upload an object to S3 receive HTTP 200 code
@@ -313,6 +333,7 @@ Key value based object store
 * Deleting individual versions or delete markers will not be replicated
 * You cannot replicate to multiple buckets or use a daisy chain
 * Presigned URL are created with the CLI and grant temporary timed access to an object or objects
+
 ### Glacier
 #### S3 - Glacier
 User to archive (backup) data with paid retrieval
@@ -322,13 +343,16 @@ User to archive (backup) data with paid retrieval
     * Expedited
     * Standard
     * Bulk
+
 #### S3 - Glacier Deep Archive
 * Super cheap
 * Retrieval time of 12 hours
+
 ### Cross Region Replication
 * Versioning must be enabled on source and target
 * Regions must be unique
 * Files existing in the bucket are not replicated automatically just new or updated files
+
 ### Versioning
 * Stores all version of an object (including all writes even if you delete the object)
 * Great for backups
@@ -339,6 +363,7 @@ User to archive (backup) data with paid retrieval
 * Versioning has multi-factor (MFA) integration to confirm deletes, providing additional security
     * Only the root account using the CLI can delete the object  with MFA enabled
     * MFA delete can only be enabled from the CLI
+
 ### Lifecycle Management
 * Can be used in conjunction with versioning
 * Can be applied to current and previous versions
@@ -346,15 +371,18 @@ User to archive (backup) data with paid retrieval
     * Transition to Standard - Infrequent Access storage class after 30 days
     * Transition to Glacier storage class 30 days after Infrequent Access if relevant
     * Permanently delete
+
 ### Transfer Acceleration
 * Uses CloudFront Edge locations to speed up file transfers with S3
 * Uses AWS backbone to speed up upload once it reaches CloudFront
 * Uses new URL e.g. bucketname.s3.accelerate.amazonaws.com
+
 ### Static Websites
 * Policy to make the entire bucket public
 * Websites that require database access cannot be hosted with S3 (unless you make calls to the API Gateway and Lamda)
 * Scales automatically
 * Sample URL bucketname.s3-websie-us-east-1.amazonaws.com (for website enabled)
+
 ### Security and Encryption
 * New buckets are private
 * Send access logs to separate S3 bucket for object requests
@@ -495,6 +523,7 @@ Translates IP addresses to human readable friendly names and vice versa
         * Can also have read replicas but watch latency
         * Each replica has unique endpoint name
         * Can be prompted to master (must rebuild replication out manually)
+
 ### DynamoDB
 NoSQL database
 * Name value pair must not exceed 400KB
@@ -507,6 +536,7 @@ NoSQL database
 * Read / Write capacity units is the important metric. Scales dynamically as you make the changes
 * Query non-primary key attributes using secondary indices
 * Scales to unlimited but above 10000 write / read capacity unites call AWS support
+
 ### RedShift
 Online Analytical Processing (OLAP / Data Warehousing)
 * Single node
@@ -517,10 +547,12 @@ Online Analytical Processing (OLAP / Data Warehousing)
 * Charged for compute nodes, data transfer and backup
 * Encrypted in transit via SSL
 * Handles own keys or via KMS
+
 ### Elasticache
 * Great for reducing read stress on a database that is not changing frequently
 * Memcache is a single AZ solution
 * Redis can be multi-AZ
+
 ### Aurora
 * MySQL & PostgreSQL compatible
 * Commercial DB at minimal cost
