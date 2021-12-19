@@ -207,6 +207,13 @@ Compute service where you upload your code ad create functions as a service. Han
 * Continuous scaling out
 * Super cheap
 
+## AWS CLI and SDK
+AWS SDK provides API libraries for integrating AWS services into your applications
+* Programmatic access must be enabled
+* Use `aws configure` to setup CLI environment profiles in `~/.aws/credentials`
+* SDK available for the following:
+    * C++, Go, Java, Javascript, .NET, NodeJS, PHP, Python, Ruby
+
 ## VPC
 Logical datacenter in AWS
 * 1 subnet = 1 availability zone
