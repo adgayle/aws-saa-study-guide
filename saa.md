@@ -108,9 +108,24 @@ Volumes restored from encrypted snapshots are also encrypted
     * Can span multiple AZs
     * Cannot be merged nor moved into a new placement group
 
-## Auto Scaling
-* Launch configuration speicifies the AMI, Instance size, IAM role, bootstrap script, etc. Answers the question of what each EC2 instance launched should look like
-* Autoscaling group specifies how many instances are launched, which network they are launched in and in which subnet (it applies this intelligently). Specifically a load balancer, health check and grace period. Also apply scaling policies beyond the initial settings for growning and shrinking. Notifications can be sent via SNS for launch, terminate and associated failures
+## Amazon Machine Images (AMI)
+Region specific templates from which to generate new EC2 instances
+* Can be copied to other regions which generates unique IDs per region
+* Can create from running or stopped instances
+* AWS, community or marketplace provided
+* Can be shared with other accounts or made public
+
+## Auto Scaling Groups (ASG)
+* Launch configuration specifies the AMI, Instance size, IAM role, bootstrap script, etc. Answers the question of what each EC2 instance launched should look like
+* Autoscaling group specifies how many instances are launched, which network they are launched in and on which subnet (it applies this intelligently). Specifically a load balancer, health check and grace period. Also apply scaling policies beyond the initial settings for growning and shrinking. Notifications can be sent via SNS for launch, terminate and associated failures
+* Launch configurations cannot be edited but you can clone
+* Launch templates are versioned and can be used to create launch configurations
+* Target scaling policy scales when the target value of a metric is breached
+* Simple scaling policy when an alarm is breached
+* Scaling policy with steps allows you to put a time interval or steps during which the alarm must be breached
+* Desired capacity is how many instances you typically want in your ASG
+* Health checks can be run against the EC2 instances or ELB (application checks)
+* ASG uses the specified launch configuration when starting new EC2 instances
 
 ## EBS
 Elastic Block Storage that is attached to EC2 instances
