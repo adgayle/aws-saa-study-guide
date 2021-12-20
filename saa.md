@@ -47,48 +47,55 @@ Decentralized managed authentication system for your mobile, desktop or web appl
 Amazon Elastic Compute Cloud reduces the time required to obtain and boot new server instances. Scale up and down quickly. Pay only for what you need.
 * Termination protection is off by default
 * Root EBS is removed automatically by default on termination
+* An instance profile attaches a role to an instance and allows it to perform tasks against AWS devices based on access.
 * Cannot encrypt customer volumes on AWS AMI must use a custom and encrypt on copy
-* Pricing Options
-    * On Demand - pay a fixed rate by the hour no commitment
-        * Good for low cost no upfront payment
-        * Shortterm, spiky or unpredictable workloads that cannot be interrupted
-        * Applications still in testing
-    * Reserved - provides a capacity reservation with a big discount over a period of typically 1 or 3 years
-        * Predictable and steady usage applications
-        * Can be converted to different instance types
-    * Spot - enables you to bid whatever price with even greater savings if your needs are flexible. Price is driven by market
-        * Require applications with flexible start and end time
-        * Must be interruptible
-        * Lowest cost
-        * Great for large capacity
-        * Terminated when the market price goes above your bid price
-        * When Amazon terminates then you are not charged for the partial hour
-        * You terminate you are charged for the partial hour
-    * Dedicated - Your own hosts but comes at a premium price
-        * Goodfor regulatory that does not support multi-tenant virtualization
-* EBS Backed
-    * Persistent
-    * Attach and reattach (root requires outage)
-    * Data remains if volumes are stopped
-    * Default is to terminate if volumes are stopped
-    * You need a custom AMI to encrypt the root volume
-    * Volume must be in the same AZ as the EC2 instance
-    * To encrypt a root device you can take a snapshot and then copy it and select encrypt then create an AMI from it to boot EC2 instances in different regions
-    * Stop instance before taking a root volume snapshots to ensure consistency
-    * Cannot share encrypt snapshots
-    Volumes restored from encrypted snapshots are also encrypted
-* Instance Backed
-    * Not persistent (ephemeral)
-    * Not for long term data
-    * Data is deleted when terminated (no stop option)
-    * Cannot attach EBS volumes during launch only after launch
-    * Cannot be stopped
-    * If the virtualization host fails you VM and instance store data are lost
-    Launched from templates stored in S3 so a little slower to launch
-* Metadata
-    * curl http://169.254.169.254/meta-data
-    * Userdata can be used to bootstrap EC2 instances
-        * To view the bootstrap script curl http://169.254.169.254/latest/user-data
+### Pricing Options
+* On Demand - pay a fixed rate by the hour no commitment
+    * Good for low cost no upfront payment
+    * Short term, spiky or unpredictable workloads that cannot be interrupted
+    * Applications still in testing
+* Reserved - provides a capacity reservation with a big discount over a period of typically 1 or 3 years
+    * Predictable and steady usage applications
+    * Can be converted to different instance types
+        * Can only change to larger or price increase
+* Spot - enables you to bid whatever price with even greater savings if your needs are flexible. Price is driven by market
+    * Require applications with flexible start and end time
+    * Must be interruptible
+    * Lowest cost
+    * Great for large capacity
+    * Terminated when the market price goes above your bid price
+    * When Amazon terminates then you are not charged for the partial hour
+    * When you terminate the instance you are charged for the usage
+* Dedicated - Your own hosts but comes at a premium price
+    * Good for regulatory that does not support multi-tenant virtualization
+* Savings Plan
+    * You commit to using $X/hour of compute and this gets you a price lower than On Demand
+    * Applies to a specific instance family
+    * No region restrictions
+
+### EBS Backed
+* Persistent
+* Attach and reattach (root requires outage)
+* Data remains if volumes are stopped
+* Default is to terminate if volumes are stopped
+* You need a custom AMI to encrypt the root volume
+* Volume must be in the same AZ as the EC2 instance
+* To encrypt a root device you can take a snapshot and then copy it and select encrypt then create an AMI from it to boot EC2 instances in different regions
+* Stop instance before taking a root volume snapshots to ensure consistency
+* Cannot share encrypt snapshots
+Volumes restored from encrypted snapshots are also encrypted
+### Instance Backed
+* Not persistent (ephemeral)
+* Not for long term data
+* Data is deleted when terminated (no stop option)
+* Cannot attach EBS volumes during launch only after launch
+* Cannot be stopped
+* If the virtualization host fails you VM and instance store data are lost
+* Launched from templates stored in S3 so a little slower to launch
+### Metadata
+* curl http://169.254.169.254/meta-data
+* Userdata can be used to bootstrap EC2 instances
+    * To view the bootstrap script curl http://169.254.169.254/latest/user-data
 
 ### Placement Groups
 * Clustered placement groups
