@@ -188,21 +188,36 @@ Elastic Block Storage that is attached to EC2 instances
 * Can log all API calls to AWS (since everything uses an API call)
 
 ## Elastic Load Balancers (ELB)
-Load Balancers spread load across resources to provide services
+Load Balancers spread load across resources to provide services. The ELB does not terminate unhealthy instances just stops traffic going to it if configured and the health check fails
+* Cross zone load balancing allows you to distribute the workload across all instances evenly. When not enabled the workload is distributed evenly at the availability zone level
+* Cannot span regions
+* Supports SSL via ACM
+* Autoscaling groups are associated to the ELB by means of the target group
+* Request routing based on
+    * Path
+    * Header
+    * Type of request e.g. GET
 * Application Load Balancer (ALB)
     * Layer 7 (application aware)
     * Best suited for HTTP & HTTPS
+    * Sticky sessions
+    * Supports Web Access Firewall (WAF) attachment
 * Network Load Balancer (NLB)
     * Best for TCP traffic where extreme performance is required
+    * Can handle UDP traffic
     * Layer 4
+    * Has no rules capability
 * Classic Load Balancer (being deprecated)
+    * Not recommended for use
     * Sticky sessions
+        * Bind a user session to a specific instance because of session information
     * HTTP & HTTPS traffic
     * Not recommended for new deployments
     * 504 Gateway Timeout - means it is having a hard time reaching the down stream resource e.g. EC2 web application
-    * X-Forward-For header allows you to see the public IP address of the person making the request
+    * X-Forward-For (XFF) header allows you to see the originating IP address of the person making the request
     * Use the DNS name as there is no public IP address released by AWS
     * Layer 4 & 7 but not as advanced as the ALB
+    * Has no rules capability
 
 ## Elastic File System (EFS)
 * Storage capacity shrinks and grows as needed
