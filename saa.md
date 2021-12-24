@@ -223,12 +223,14 @@ Load Balancers spread load across resources to provide services. The ELB does no
 
 ## Elastic File System (EFS)
 * Storage capacity shrinks and grows as needed
+* Pay per GB used
 * Available over NFSv4
-* Can be shared across multiple EC2 instances
+* Can be shared across multiple EC2 instances in the same VPC
 * Scale to petabytes
+* Thousands of concurrent connections
 * Block based storage
 * Read after write consistency
-* EC2 must have the same security group as the EFS to mount the shared volume
+* EC2 security group must allow NFS access to the EFS security group to mount the shared volume
 
 ## Lambda
 Compute service where you upload your code ad create functions as a service. Handles scaling, operating systems, patching, etc. This is event driven or in response to HTTP requests
