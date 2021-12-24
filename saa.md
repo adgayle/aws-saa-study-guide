@@ -83,7 +83,7 @@ Amazon Elastic Compute Cloud reduces the time required to obtain and boot new se
 * To encrypt a root device you can take a snapshot and then copy it and select encrypt then create an AMI from it to boot EC2 instances in different regions
 * Stop instance before taking a root volume snapshots to ensure consistency
 * Cannot share encrypt snapshots
-Volumes restored from encrypted snapshots are also encrypted
+* Volumes restored from encrypted snapshots are also encrypted
 ### Instance Backed
 * Not persistent (ephemeral)
 * Not for long term data
@@ -133,15 +133,17 @@ Elastic Block Storage that is attached to EC2 instances
 * Use RAID 0 to virtually increase IOPS limits
 * Must be in the same AZ as the EC2 instance (latency issue)
 * Move AZ/region using snapshot and copy
+* Change to encrypted by snapshot and copy (set encryption flag)
 * Volume Types
-    * General Purpose (gp2)
+    * General Purpose (gp2 / gp3)
         * Bootable
-        * Up to 10000 IOPS
-    * Provisioned IOPS (io1)
+        * Larger gp2 volumes have greater throughput
+        * gp3 does not need a size increase to increase throughput (throughput independent of size)
+        * Use for low latency apps with IOPs less than 16000
+    * Provisioned IOPS (io1 / io2)
         * Bootable
         * I/O intensive applications e.g. NoSQL
-        * Greater than 10000 IOPS
-        * Up to 20000 IOPS per volume
+        * Use for IOPs greater than 16000
     * Throughput Optimized (st1)
         * Not bootable
         * Log processing
@@ -161,7 +163,7 @@ Elastic Block Storage that is attached to EC2 instances
     * Point in time copy stored in S3
     * Only changed blocks (incremental) are stored in S3
     * Automatically encrypted if volumes are restored from encrypted volumes
-    * Cannot share encrypted volumes
+    * Cannot share encrypted volumes (KMS key issue)
     * Application consistent snapshot options for RAID
         * Freeze the file system
         * Unmount the volume
