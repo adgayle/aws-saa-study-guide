@@ -583,29 +583,38 @@ Traffic flow visual editor allows you to create different policies and version t
 * Encryption at rest with KMS
     * To encrypt copy the snapshot with the encryption enabled then restore the snapshot to a new database
 * Replication
-    * Multi-AZ replicates the database synchronously to another AZ
-    * Primary failures move the name to the secondary database in the next AZ automatically as a part of the failover process
+    * Multi-AZ
+        * Replicates the database synchronously to another AZ
+        * Primary failures move the name to the secondary database in the next AZ automatically as a part of the failover process
         * Used for HA
         * Supported by Aurora, SQL Server, MySQL, PostgreSQL, MariaDB & Oracle
         * Supports read replicas
         * Single endpoint name (see automatic name move)
+        * Automated backups are taken from the standby
+        * Must be in the same region
+        * Standby cannot be used for as the engine is inactive
+        * Upgrades take place on the primary instance
     * Read replicas
-        * Replicated synchronously
+        * Replicated asynchronously
         * Send read requests to read replicas to improve performance
         * Not for DR
         * Up to 5 replicas
+        * Can be used with Multi-AZ
         * Automated backups must be enabled
         * Supported by MySQL, MariaDB, PostgreSQL & Aurora
         * Can also have read replicas but watch latency
         * Each replica has unique endpoint name
         * Can be prompted to master (must rebuild replication out manually)
+        * Extendable to cross-AZ and cross-region
 
 ### DynamoDB
 NoSQL database
 * Name value pair must not exceed 400KB
 * Millisecond access times
 * SSD Storage
-* 3 disctince facilities in each region
+* Across 3 facilities in a region
+* Global tables allows you to span regions
+* Row = Item
 * Eventually consistent model (default and best performance)
 * Strongly consistent model available (use when read required 1 second after write)
 * Expensive for large number of writes, cheap for large number of reads
@@ -648,6 +657,12 @@ Online Analytical Processing (OLAP / Data Warehousing) to analyze massive amount
 * Scales to over 10TB
 * Scales to 32 CPU / 244GB
 * Keeps 2 copies in each AZ across 3 AZ
+* Up to 15 replicas
+* Can span multiple regions with Aurora Global Database
+* Backups and failover are handled automatically
+
+### Aurora Serverless
+Automatically starts and scales up to application needs and is good for infrequent, intermittent and unpredictable workloads
 
 ## Simple Queuing Service (SQS)
 Distributed queue system for message awaiting processing (always a pull based system)
