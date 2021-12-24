@@ -461,24 +461,28 @@ Sequence of events
 * User -> Application -> Identity Broker -> Identity Store (LDAP) -> AWS STS -> Application -> AWS Service -> AWS IAM -> Temporary access to AWS service
 
 ## CloudFront Content Delivery Network
+Content distribution network (CDN) that makes web / video content load faster by providing a cache closer to the user
 * Edge location is the location where the content is cached. Separate from regions and AZ
 * Origin is all the files that the CDN will distribute. Can be S3 bucket, EC2 instances, ELB instance, Route53 or non aWS file store
-* Distribution is the name given to the CDN which consists of a collection of Edge locations
+* Distribution is the name given to a collection of Edge locations
 * Edge locations can be written to (process uploads)
 * Objects are cached for a TTL
-* Cache can be cleared but there is a charge
-* Origin can be a folder in an S3 bucket
+* Cache can be cleared / invalidated but there is a charge
+* Origin can be a folder in an S3 bucket, EC2, ELB
 * S3 buckets do not have to be public and can limit access to just the distribution with OAI
 * All HTTP methods are supported via the distribution including PUT and POST
 * Restrict view access via using signed URLs and signed cookies
 * Can further protect using WAF (Web Application Firewall)
 * CNAMES can be specified
-* Use OAI to access S3 origin and prevent everything else from accessing S3
+* Use Origin Access Identity (OAI) to access S3 origin and prevent everything else from accessing S3
+    * Signed URLs
+    * Signed Cookies
 * SSL can be a custom certificate
 * Content can be restricted by Geography
-* Types of CDN
+* Types of distributions
     * RTMP / RTP for video streaming
     * Static website hosting
+* Lambda@Edge allows you to pass the select requests and responses to Lambda
 
 ## Snowball
 Used to move large amounts of data in and out of AWS (mostly S3 and Glacier).  Replaced the Import/Export service). Convenient way to tranfer 100 TB to S3 in a week or less.
