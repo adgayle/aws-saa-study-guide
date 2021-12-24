@@ -614,15 +614,28 @@ NoSQL database
 * Scales to unlimited but above 10000 write / read capacity unites call AWS support
 
 ### RedShift
-Online Analytical Processing (OLAP / Data Warehousing)
-* Single node
+Online Analytical Processing (OLAP / Data Warehousing) to analyze massive amounts of data
+* Single node (160GB)
 * Multi node
-    * Leader node - client connection
-    * Compute nodes
+    * Leader node - client connection (no charge)
+    * Compute nodes (charge), up to 128
+    * Data automatically distributed across nodes
 * Columnar data storage reduces IO
+    * Stores data together as columns rather than rows
+    * Reduces IO since only the column is fetched rather than entire row
+    * Allows for easy compression
 * Charged for compute nodes, data transfer and backup
 * Encrypted in transit via SSL
+* Encrypted at rest with KMS or CloudHSM keys
+* Loaded from S3, EMR, DynamoDB
 * Handles own keys or via KMS
+* Does not require indexes
+* Operates in a single AZ
+* Keeps 3 copies (original, replica and backup in S3)
+* Uses Massively Parallel Processing (MPP) to distribute queries and loads
+* Two node types
+    * Dense compute (dc): high compute performance but less storage
+    * Dense storage (ds): lots of storage
 
 ### Elasticache
 * Great for reducing read stress on a database that is not changing frequently
