@@ -170,18 +170,24 @@ Elastic Block Storage that is attached to EC2 instances
         * Shutdown the EC2 instance
 
 ## CloudWatch
-* Basic / Standard monitoring (5 minute interval / free tier)
-* Detailed monitoring ( 1 minute / paid service)
-* Can create dashboards and alarms (sent via SNS) which requires confirmation
-* EC2 metrics
-    * CPU
-    * Disk
-    * Network
-    * Status checks
-* CloudWatch events enable you to respond to state changes in AWS resources
+* EC2 Basic / Standard monitoring (5 minute interval / free tier)
+* EC2 Detailed monitoring ( 1 minute / paid service)
+* Can create dashboards and alarms (sent via SNS topics) which requires confirmation
+* High resolution metrics allow you to have custom metrics under 1 minute as low as every 1 second
+* CloudWatch metrics can be visualized in CloudWatch Dashboards
+* CloudWatch EC2 metrics
+    * CPU Usage
+    * Disk Performance
+    * Network Usage
+    * Status Checks
+* Memory usage and disk space utilization are not included by default and require CloudWatch Agent installation
+* CloudWatch Events / Event Bridge enable you to respond to state changes in AWS resources
     * You can use lambda functions to respond to the state changes
 * CloudWatch Logs used to aggregate, monitor and store logs
-    * Requires an agent installed to send logs
+    * Requires an agent installed to send the logs
+    * Stored indefinitely
+    * Logs are stored in log groups
+    * You can stream custom logs
 * Use scripts or CloudWatch Agent to send custom metrics
 
 ## CloudTrail
