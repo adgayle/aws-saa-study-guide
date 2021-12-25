@@ -699,6 +699,23 @@ Coordinates work across distributed application components
     * Deciders - flow control
     * Activity - task doer
 
+## CloudFormation
+Used to automate the provisioning of resources in AWS
+* Written in JSON or YAML
+* If error encountered during a deploy a ROLLBACK_IN_PROGRESS state will be assumed
+* Templates larger than 51,200 bytes have to be loaded from S3 not direct upload
+* NestedStacks allows you to break larger templates into smaller ones
+* A template MUST have at least 1 resource
+* Components of a CloudFormation Template
+    * Metadata extra information about template
+    * Description describe the template purpose
+    * Parameters allows users to pass information into template
+    * Transforms apply macros
+    * Outputs are exported from the current stack for import into other stacks
+    * Mappings map keys to values for use like a lookup table
+    * Resources define what to provision
+    * Conditions determine where a resources are created and with which attributes
+
 ## OpsWorks
 * Orchestration service using Chef or Puppet
 * Chef cookbooks & recipes
