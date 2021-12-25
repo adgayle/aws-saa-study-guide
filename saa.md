@@ -191,9 +191,21 @@ Elastic Block Storage that is attached to EC2 instances
 * Use scripts or CloudWatch Agent to send custom metrics
 
 ## CloudTrail
+Monitor API calls and actions made on an AWS account
 * Per AWS account and per region (recommended to enabled in all)
 * Consolidate to S3 for paying account or dedicated account for logs
 * Can log all API calls to AWS (since everything uses an API call)
+* Includes the source of the call, when, who and what was done
+* Logs for 90 days in Event history
+* Beyond 90 days store the logs in S3 and process with AWS Athena
+* Can be enabled in multiple regions in a single account in single click
+* Can be enabled in multiple accounts in an organization in a single click
+* Logs can be encrypted via KMS
+* Log file validation can be enabled to prevent tampering
+* CloudTrail events can be sent to CloudWatch
+* Data events are high volume and expensive to enable
+* Management events are management operations performed in the account
+* governance, compliance, operational auditin and risk auditing are keyword triggers
 
 ## Elastic Load Balancers (ELB)
 Load Balancers spread load across resources to provide services. The ELB does not terminate unhealthy instances just stops traffic going to it if configured and the health check fails
