@@ -717,7 +717,7 @@ Distributed queue system for message awaiting processing (always a pull based sy
 
 ## Simple Work Flow (SWF)
 Coordinates work across distributed application components
-* Workers (can be human) are programgs that interact with SWF to get tasks, process received tasks and return results
+* Workers (can be human) are programs that interact with SWF to get tasks, process received tasks and return results
     * Tasks are assigned only once and never duplicated
 * Deciders are programs that control the coordination of tasks and scheduling accoring to the application logic
 * Workflow starters initiate the workflow
