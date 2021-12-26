@@ -672,9 +672,18 @@ Online Analytical Processing (OLAP / Data Warehousing) to analyze massive amount
     * Dense storage (ds): lots of storage
 
 ### Elasticache
+Caches are optimized for fast retrieval with the trade off that the data is not durable
 * Great for reducing read stress on a database that is not changing frequently
+* Best in the same VPC to avoid latency
 * Memcache is a single AZ solution
+    * Multi-threaded
+    * Simple, fast key/value store
+    * Great for caching HTML fragments
 * Redis can be multi-AZ
+    * Replication
+    * Snapshots
+    * Advanced data structures
+    * Very good for leaderboards, geospatial data or unread notifications
 
 ### Aurora
 * MySQL & PostgreSQL compatible
