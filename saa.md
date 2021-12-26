@@ -469,6 +469,21 @@ User to archive (backup) data with paid retrieval
     * In Transit
         * SSL/TLS
 
+## Elastic Beanstalk
+Select a platform for your code, upload it (zip file including .ebextensions) and it runs with little worry for developers about the infrastructure. Not recommended for "Production" use by AWS
+* Based on CloudFormation
+* Use S3 if application code exceeds 512MB
+* Provisions
+    * ELB
+    * ASG
+    * EC2 instances
+    * Monitoring
+    * Blue / Green deployments available
+    * Security to rotate RDS passwords
+    * Supports docker deployments for custom application
+* Environments supported
+    * Java, .NET, PHP, Node.js, Python, Ruby, Go and Docker
+
 ## Security Token Service
 Provides limited temporary access to AWS resources
 * Via federation typicall Active Directory
