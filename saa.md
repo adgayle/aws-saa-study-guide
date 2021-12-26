@@ -251,18 +251,25 @@ Load Balancers spread load across resources to provide services. The ELB does no
 * EC2 security group must allow NFS access to the EFS security group to mount the shared volume
 
 ## Lambda
-Compute service where you upload your code ad create functions as a service. Handles scaling, operating systems, patching, etc. This is event driven or in response to HTTP requests
+Cheap, serverless, and autoscaling compute service where you upload your code and create functions as a service. Handles scaling, operating systems, patching, etc. This is event driven or in response to HTTP requests
 * Lambda Languages
-    * C#, Node.js, Go, Java, Python, Ruby
+    * C#, Node.js, Go, Java, Python, Ruby, Powershell
 * Lambda Triggers
-    * API Gateway, IoT, Alexa Skills, Alexa Smart Home, CloudFront, CloudWatch Events, CloudWatch Logs, CodeCommit, Kinesis, Cognito Sync, S3, SNS, DynamoDB
+    * API Gateway, IoT, Alexa Skills, Alexa Smart Home, CloudFront, CloudWatch Events, CloudWatch Logs, CodeCommit, Kinesis, Cognito Sync, S3, SNS, SQS, DynamoDB
 * Each call invokes a new Lambda function (1 event = 1 function)
 * Lambda functions can trigger another Lambda function(s)
+* Good for short running tasks
 * Pricing
     * Number of requests
     * Duration of execution
-* Function cannot run for more than 15 minutes
+    * Memory assigned
+* Default Limits
+    * Function cannot run for more than 15 minutes
+    * /tmp up to 500MB
+    * Memory 3008M
+    * Default is to run with No VPC with VPC you lose internet access. Must be in VPC to interact with things only in a VPC
 * No servers
+* Period of delay during the cold start (server startup and code copy). Pre-Warm to workaround
 * Continuous scaling out
 * Super cheap
 
