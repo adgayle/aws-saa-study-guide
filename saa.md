@@ -752,9 +752,11 @@ Used to automate the provisioning of resources in AWS
 * Puppet manifests
 
 ## Simple Notification Service (SNS)
-Setup operate and publish/push messages from the cloud to subscribers via topics or other applications
-* Text (SMS), email, SQS, Lambda or HTTP endpoint
+Setup operate and publish/push messages from the cloud to subscriber via topics or other applications for integration
+* Platform application endpoint (mobile push), Text (SMS), email (text or JSON), SQS, Lambda or HTTP endpoint (webhooks)
 * Instant push no polling
+* Topics can be encrypted using a KMS key
+* Stored across multiple AZs
 
 ## Elastic Transcoder
 Converts media files from one format to another for playing on various platforms (PC, mobile phones, tablets, etc.)
