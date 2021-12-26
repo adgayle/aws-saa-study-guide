@@ -690,15 +690,17 @@ Online Analytical Processing (OLAP / Data Warehousing) to analyze massive amount
 Automatically starts and scales up to application needs and is good for infrequent, intermittent and unpredictable workloads
 
 ## Simple Queuing Service (SQS)
-Distributed queue system for message awaiting processing (always a pull based system)
+Distributed queue system for message awaiting processing (always a pull based system). Used for application integration
 * Great way to decouple applications components
-* Messages can contain up to 256KB of data
+* Messages can contain from 1 byte up to 256KB of data
 * Messages can stay from 1 minute to 14 days (default is 4 days)
 * Visibility timeout is the amount of time a message is hidden from the queue after being picked up for processing
-* Default visibility timeout is 30 seconds with a maximum of 12 hours. Configure based on the time to process each message
+* Default visibility timeout is 30 seconds with a minimum of 0 seconds and a maximum of 12 hours. Configure based on the time to process each message
 * Messages will be processed at least once
-* Short polling returns immediately even when no messages are in the queue
+* Short polling (default) returns immediately even when no messages are in the queue
+    * Use only if you need the message right away
 * Long polling checks periodically and only returns a response when a message exists or timeout is reached
+    * Reduces costs since it reduces the number of polls
 * Queue types
     * Standard queue - best effort ordering
     * FIFO queue - guaranteed ordering
