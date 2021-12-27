@@ -469,6 +469,15 @@ User to archive (backup) data with paid retrieval
     * In Transit
         * SSL/TLS
 
+## Storage Gateway
+Connects an on-premises software appliance (Virtual Machine supporting VMware ESXi or Microsoft Hyper-V) with cloud-based storage.
+* Gateway type
+    * File Gateway (NFS/SMB): Stores files as objects in S3 with local on-premise cache for low latency access of recently accessed data
+    * Volume Gateway (iSCSI): Block storage in S3 with point-in-time backups as EBS snapshots
+        * Stored volumes 1-16TB: Primary data on-premise
+        * Cached volumes 1-32TB: Stored on AWS cached on-premise
+    * Tape Gateway (VTL): Back up data to S3 and archive to Glacier using existing tape rotation process
+
 ## Elastic Beanstalk
 Select a platform for your code, upload it (zip file including .ebextensions) and it runs with little worry for developers about the infrastructure. Not recommended for "Production" use by AWS
 * Based on CloudFormation
