@@ -782,26 +782,50 @@ Converts media files from one format to another for playing on various platforms
 Managed service to publish, maintain, monitor and secure APIs at scale
 * API caching improves performance by storing response for a specified TTL
 * Web pages need the same origin policy so use cross-origin resource sharing (CORS) to address
-* Throttle requests to prevent attacks
-* Log results using CloudWatch Logs
+    * Allows restricted from different domains
+    * Setup using HTTP headers
+    * Client enforces CORS
+* Throttle requests to prevent attacks. 10000 requests/s by default
+* Publish multiple versions of your API using stages with a unique URL
+* You have to deploy using the Deploy API action
+* Resources are your URL and can have children
+* You can use a custom domain
+* Same origin policy helps to prevent cross site scripting (XSS) attacks
+* Log results using CloudWatch
+* API Gateway cache your responses to API calls within a TTL
+* Integration types
+    * Lambda
+    * HTTP
+    * Mock
+    * AWS Service
+    * VPC Link
 
 ## Kinesis
-Streaming data has generated continuously from thousands of sources, sending small data records simultaneously (stock prices, social network data, etc.)
+Collecting, processing and analyzing streaming data generated continuously from thousands of sources, sending small data records simultaneously (stock prices, social network data, etc.). Typically in real-time.
 * Makes it easy to analyze and process streaming data
-* Producers send data to streams which are then access to by consumers
+* Producers send data to streams which are then accessed to by consumers
 * Great way to bring big data (news logs, social media feeds) into the AWS cloud for consumption by RedShift for business intelligence or Elastic Map Reduce for big data processing
 * Course services
-    * Streams.
-        * 24 hour default to seven day retention
+    * Streams
+        * 24 hour default to seven day (168 hours)  retention
         * Uses shards
+        * Lots of consumers
+        * Consumers have to be manually added
+        * Runs all the time so expensive
     * Firehose
-        * No automatic data retention
+        * No data retention
+        * Cheaper
         * Analysed and or sent to another device
         * Sends data to S3
         * No need to worry about consumers
         * No shards
+        * Single consumer
     * Analytics
-        * Run SQL queries of data in Kinesis.
+        * Run SQL queries of data in Kinesis
+        * Needs Kinesis Data Streams/Firehose as input & output
+    * Video Streams
+        * Ingests video and audio encoded data
+        * Consumers SageMaker and Rekognition
 
 ## Elastic Container Service (ECS)
 Build, test and deploy applications quickly using containers
