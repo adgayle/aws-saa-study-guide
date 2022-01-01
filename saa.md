@@ -1,36 +1,36 @@
 # AWS Solution Architect - Associate
 ## AWS Global Infrastructure
 * An Availability Zone (AZ) is one or more discrete data centers, each with redundant power, networking and connectivity housed in separate facilities
-* A Region is a physical location in the workd which consists of two or more Availability Zones (AZ)
+* A Region is a physical location in the world which consists of two or more Availability Zones (AZ)
 * Edge Locations are endpoints for AWS which are used for content caching. Typically consists of CloudFront, Amazon's Content Delivery Network (CDN)
 
 ## IAM
 ### 101
 * Manages access to users and resources in an AWS account
 * Allows for shared access to the AWS account by multiple users
-* Granular permissions
-* Identity Federation (Active Directory,  Facebook, LinkedIn, etc.)
+* Granular permissions using JSON policy
+* Identity Federation (Active Directory, Facebook, LinkedIn, etc.)
 * Multi-factor authentication (enable at least for root account)
 * Provide temporary access for users / devices and services where necessary
 * Default access is No Access
 * Roles are Global
-* You can now attach / detach roles to running EC2 instances
+* You can attach / detach roles to running EC2 instances
 
 ### Authorization and Authentication
 * Users, Groups, Roles, Policy Documents (JSON)
-* Universal so not region independent
+* Universal so not region dependent
 * Root account has complete access
 * New users have no access
 * Programmatic access via Access Key ID and Secret Access Key. Shared only at creation so save them for SDK, CLI and API use. Cannot be used for console access.
 * Console access via user and password
 * Multi-factor and password policy can be enabled
-    * Always enabled MFA for root user
-    * Users have to enabled their own MFA
+    * Always enable MFA for root user
+    * Users have to enable their own MFA
 * Use groups to organize access
 * Roles can be assigned to users or groups
 * IAM policies are JSON documents granting permissions to users to access resources
 * Managed policies are created by AWS and cannot be edited
-* Customer policies are created by the customer
+* Custom policies can be created
 * Inline policies are attached directly to the user
 
 ## Cognito
@@ -40,15 +40,15 @@ Decentralized managed authentication system for your mobile, desktop or web appl
 * Identity pools provide temporary AWS credentials to access services e.g. S3
 * Cognito Sync can sync user data across multiple devices (based on SNS)
 * Web Identity Federation exchanges identity and security information between th iDP and the application
-* OIDC type of identity provider which uses OAuth
-* SAML type of identity provider which is used for SSO (Single Sign-on)
+* OIDC is a type of identity provider which uses OAuth
+* SAML is a type of identity provider which is used for SSO (Single Sign-on)
 
 ## EC2
 Amazon Elastic Compute Cloud reduces the time required to obtain and boot new server instances. Scale up and down quickly. Pay only for what you need.
 * Termination protection is off by default
-* Root EBS is removed automatically by default on termination
-* An instance profile attaches a role to an instance and allows it to perform tasks against AWS devices based on access.
-* Cannot encrypt customer volumes on AWS AMI must use a custom and encrypt on copy
+* Root EBS is removed automatically by default on instance termination
+* An instance profile attaches a role to an instance and allows it to perform tasks against AWS devices based on access
+
 ### Pricing Options
 * On Demand - pay a fixed rate by the hour no commitment
     * Good for low cost no upfront payment
@@ -57,17 +57,17 @@ Amazon Elastic Compute Cloud reduces the time required to obtain and boot new se
 * Reserved - provides a capacity reservation with a big discount over a period of typically 1 or 3 years
     * Predictable and steady usage applications
     * Can be converted to different instance types
-        * Can only change to larger or price increase
+        * Can only change to larger
 * Spot - enables you to bid whatever price with even greater savings if your needs are flexible. Price is driven by market
-    * Require applications with flexible start and end time
+    * Require applications with flexible start and end times
     * Must be interruptible
     * Lowest cost
     * Great for large capacity
     * Terminated when the market price goes above your bid price
-    * When Amazon terminates then you are not charged for the partial hour
+    * When Amazon terminates the instance then you are not charged for the partial hour
     * When you terminate the instance you are charged for the usage
 * Dedicated - Your own hosts but comes at a premium price
-    * Good for regulatory that does not support multi-tenant virtualization
+    * Good for regulatory requirements that do not allow for multi-tenant virtualization
 * Savings Plan
     * You commit to using $X/hour of compute and this gets you a price lower than On Demand
     * Applies to a specific instance family
@@ -77,21 +77,22 @@ Amazon Elastic Compute Cloud reduces the time required to obtain and boot new se
 * Persistent
 * Attach and reattach (root requires outage)
 * Data remains if volumes are stopped
-* Default is to terminate if volumes are stopped
-* You need a custom AMI to encrypt the root volume
+* Default is to delete the volumes if instances are terminated
 * Volume must be in the same AZ as the EC2 instance
 * To encrypt a root device you can take a snapshot and then copy it and select encrypt then create an AMI from it to boot EC2 instances in different regions
 * Stop instance before taking a root volume snapshots to ensure consistency
-* Cannot share encrypt snapshots
+* Cannot share encrypted snapshots
 * Volumes restored from encrypted snapshots are also encrypted
+
 ### Instance Backed
 * Not persistent (ephemeral)
 * Not for long term data
 * Data is deleted when terminated (no stop option)
 * Cannot attach EBS volumes during launch only after launch
 * Cannot be stopped
-* If the virtualization host fails you VM and instance store data are lost
+* If the virtualization host fails your VM and instance store data are lost to termination
 * Launched from templates stored in S3 so a little slower to launch
+
 ### Metadata
 * curl http://169.254.169.254/meta-data
 * Userdata can be used to bootstrap EC2 instances
@@ -104,21 +105,21 @@ Amazon Elastic Compute Cloud reduces the time required to obtain and boot new se
     * Single AZ
 * Spread placement groups
     * Instances placed on distinct underlying hardware
-    * Used to separate instances of the same application on different hardware
+    * Used to separate instances of the same application on different physical hardware
     * Can span multiple AZs
-    * Cannot be merged nor moved into a new placement group
+    * Cannot neither be merged nor moved into a new placement group
 
 ## Amazon Machine Images (AMI)
 Region specific templates from which to generate new EC2 instances
 * Can be copied to other regions which generates unique IDs per region
 * Can create from running or stopped instances
-* AWS, community or marketplace provided
+* AWS, community or marketplace AMI are available
 * Can be shared with other accounts or made public
 
 ## Auto Scaling Groups (ASG)
 * Launch configuration specifies the AMI, Instance size, IAM role, bootstrap script, etc. Answers the question of what each EC2 instance launched should look like
 * Autoscaling group specifies how many instances are launched, which network they are launched in and on which subnet (it applies this intelligently). Specifically a load balancer, health check and grace period. Also apply scaling policies beyond the initial settings for growning and shrinking. Notifications can be sent via SNS for launch, terminate and associated failures
-* Launch configurations cannot be edited but you can clone
+* Launch configurations cannot be edited but you can clone an existing and then change it
 * Launch templates are versioned and can be used to create launch configurations
 * Target scaling policy scales when the target value of a metric is breached
 * Simple scaling policy when an alarm is breached
@@ -126,6 +127,7 @@ Region specific templates from which to generate new EC2 instances
 * Desired capacity is how many instances you typically want in your ASG
 * Health checks can be run against the EC2 instances or ELB (application checks)
 * ASG uses the specified launch configuration when starting new EC2 instances
+* Cool down period ensures that the autoscaling policy does not take further action during this time window to prevent thrashing
 
 ## EBS
 Elastic Block Storage that is attached to EC2 instances
@@ -133,7 +135,7 @@ Elastic Block Storage that is attached to EC2 instances
 * Use RAID 0 to virtually increase IOPS limits
 * Must be in the same AZ as the EC2 instance (latency issue)
 * Move AZ/region using snapshot and copy
-* Change to encrypted by snapshot and copy (set encryption flag)
+* Change to encrypted by taking a snapshot and copy (set encryption flag)
 * Volume Types
     * General Purpose (gp2 / gp3)
         * Bootable
@@ -186,8 +188,8 @@ Elastic Block Storage that is attached to EC2 instances
 * CloudWatch Logs used to aggregate, monitor and store logs
     * Requires an agent installed to send the logs
     * Stored indefinitely
-    * Logs are stored in log groups
-    * You can stream custom logs
+    * Logs are stored in log groups. A log group is a group of log streams that share the same retention, monitoring, and access control settings. You can define log groups and specify which streams to put into each group. There is no limit on the number of log streams that can belong to one log group. 
+    * You can stream custom logs. A log stream is a sequence of log events that share the same source. Each separate source of logs in CloudWatch Logs makes up a separate log stream.
 * Use scripts or CloudWatch Agent to send custom metrics
 
 ## CloudTrail
@@ -205,13 +207,13 @@ Monitor API calls and actions made on an AWS account
 * CloudTrail events can be sent to CloudWatch
 * Data events are high volume and expensive to enable
 * Management events are management operations performed in the account
-* governance, compliance, operational auditin and risk auditing are keyword triggers
+* Governance, compliance, operational and risk auditing are keyword triggers
 
 ## Elastic Load Balancers (ELB)
 Load Balancers spread load across resources to provide services. The ELB does not terminate unhealthy instances just stops traffic going to it if configured and the health check fails
 * Cross zone load balancing allows you to distribute the workload across all instances evenly. When not enabled the workload is distributed evenly at the availability zone level
 * Cannot span regions
-* Supports SSL via ACM
+* Supports SSL via AWS Certificate Manager
 * Autoscaling groups are associated to the ELB by means of the target group
 * Request routing based on
     * Path
@@ -257,7 +259,7 @@ Cheap, serverless, and autoscaling compute service where you upload your code an
 * Lambda Triggers
     * API Gateway, IoT, Alexa Skills, Alexa Smart Home, CloudFront, CloudWatch Events, CloudWatch Logs, CodeCommit, Kinesis, Cognito Sync, S3, SNS, SQS, DynamoDB
 * Each call invokes a new Lambda function (1 event = 1 function)
-* Lambda functions can trigger another Lambda function(s)
+* Lambda functions can trigger other Lambda function(s)
 * Good for short running tasks
 * Pricing
     * Number of requests
@@ -266,7 +268,7 @@ Cheap, serverless, and autoscaling compute service where you upload your code an
 * Default Limits
     * Function cannot run for more than 15 minutes
     * /tmp up to 500MB
-    * Memory 3008M
+    * Memory 3008MB
     * Default is to run with No VPC with VPC you lose internet access. Must be in VPC to interact with things only in a VPC
 * No servers
 * Period of delay during the cold start (server startup and code copy). Pre-Warm to workaround
@@ -278,7 +280,7 @@ AWS SDK provides API libraries for integrating AWS services into your applicatio
 * Programmatic access must be enabled
 * Use `aws configure` to setup CLI environment profiles in `~/.aws/credentials`
 * SDK available for the following:
-    * C++, Go, Java, Javascript, .NET, NodeJS, PHP, Python, Ruby
+    * C++, Go, Java, Javascript, .NET, Node.js, PHP, Python, Ruby
 
 ## VPC
 Logical datacenter in AWS
@@ -293,11 +295,11 @@ Logical datacenter in AWS
 * New NACL default is DENY everything
 * Default NACL allows everything
 * Can use one NACL for multiple subnets
-* Subnet can only have 1 NACL at a time and must have one, default is assigned if none assigned
+* Subnet must have exactly 1 NACL assigned, the default is assigned if none is added
 * Rules are evaluted in numerical order (lowest first)
 * Separate inbound and outbound rules
-* Has DENY rule which 
-* Network Access Control Lists (NACLs) are stateless (must open ports directly, remember ephemeral ports)
+* Has DENY rule which security groups lack
+* Network Access Control Lists (NACLs) are stateless (must open ports explicitly, remember ephemeral ports)
 * Allow ephemeral ports for outbound
 * Useful for blocking inbound traffic
 
@@ -307,7 +309,7 @@ Logical datacenter in AWS
     * 60 inbound and 60 outbound rules per security group
     * 10000 security groups per region (default 2500)
 * Can allow IP, IP range or another security group
-* All outbound allowed by default
+* All outbound allowed by default except when programmatically created
 * All inbound blocked by default (no rule)
 * Stateful (allowed inbound traffic is also allowed to return out)
 * Changes are immediately effective
@@ -324,31 +326,32 @@ Logical datacenter in AWS
 * Can be done at VPC, subnet or NIC level
 * Cannot tag flow log
 * Cannot enable flow logs on peer VPC unless it is in your account
-* Cannot change the configuration of a flow log after 
+* Cannot change the configuration of a flow log after creation
 * Can be sent to either S3 or CloudWatch Logs
-* Amazon core infrastructure (DNS, DHCP, Windows license, metadata address, etc.) is not included
+* Amazon core infrastructure services (DNS, DHCP, Windows license, metadata address, etc.) are not included
 
 ### VPC Peering
 * Route traffic between VPC in same or different accounts
 * No single point of failure or bandwidth limitations
 * Cannot use the same or overlapping IP address (CIDR) block
 * No transitive peering. Must be directly peered
-* Cannot route direct connect of internet traffic. No edge routing
+* Cannot route direct connect or internet traffic. No edge routing
 
 ### Nat Instances
 * Replaced by redundant NAT Gateway (paid AWS managed service per AZ)
 * Must disable source and destination traffic checking so that it can forward traffic from other instances
 * Must be in a public subnet
-* Instance size if determined by traffic processed
+* Instance size is determined by traffic processed
 * Must have a path from private subnet to NAT instance to get out
 
 ### Bastion Hosts / Jump Boxes
 * Used to securely administer EC2 instances in private subnets via SSH / RDP
 * Must be hardened
 * Do not store private keys use SSH Forwarding
+* Replaced by Systems Manager (SSM) agent to provide access
 
 ### VPC Endpoints
-* Keep traffic for AWS services with the AWS network
+* Keep traffic for AWS services in the AWS network
 * Two types
     * Interface endpoint
         * Costs money
@@ -376,7 +379,6 @@ Key value based object store
 * Files are stored in buckets
 * File names are the keys and the file data are the objects
 * S3 bucket names are universal. That is they must be unique globally
-* Link to file example https://s3-eu-west-1.amazonaws.com/mybucket-986
 * New object creation is strongly consistent
 * Deletes and overwrites of objects are eventually consistent
 
@@ -407,20 +409,6 @@ Key value based object store
 * You cannot replicate to multiple buckets or use a daisy chain
 * Presigned URL are created with the CLI and grant temporary timed access to an object or objects
 
-### Glacier
-#### S3 - Glacier
-User to archive (backup) data with paid retrieval
-* 30 days after IA or 1 day after S3
-* Takes minutes to hours to retrieve data
-* Retrieval types
-    * Expedited
-    * Standard
-    * Bulk
-
-#### S3 - Glacier Deep Archive
-* Super cheap
-* Retrieval time of 12 hours
-
 ### Cross Region Replication
 * Versioning must be enabled on source and target
 * Regions must be unique
@@ -434,7 +422,7 @@ User to archive (backup) data with paid retrieval
 * Once enabled, versioning cannot be disable, only suspended
 * Integrates with lifecycle rules
 * Versioning has multi-factor (MFA) integration to confirm deletes, providing additional security
-    * Only the root account using the CLI can delete the object  with MFA enabled
+    * Only the root account using the CLI can delete the object with MFA enabled
     * MFA delete can only be enabled from the CLI
 
 ### Lifecycle Management
@@ -468,6 +456,20 @@ User to archive (backup) data with paid retrieval
         * Customer Provided Keys (SSE-C)
     * In Transit
         * SSL/TLS
+
+### Glacier
+#### S3 - Glacier
+User to archive (backup) data with paid retrieval
+* 30 days after IA or 1 day after S3
+* Takes minutes to hours to retrieve data
+* Retrieval types
+    * Expedited
+    * Standard
+    * Bulk
+
+#### S3 - Glacier Deep Archive
+* Super cheap
+* Retrieval time of 12 hours
 
 ## Storage Gateway
 Connects an on-premises software appliance (Virtual Machine supporting VMware ESXi or Microsoft Hyper-V) with cloud-based storage.
