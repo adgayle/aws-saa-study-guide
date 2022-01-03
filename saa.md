@@ -481,7 +481,7 @@ Connects an on-premises software appliance (Virtual Machine supporting VMware ES
     * Tape Gateway (VTL): Back up data to S3 and archive to Glacier using existing tape rotation process
 
 ## Elastic Beanstalk
-Select a platform for your code, upload it (zip file including .ebextensions) and it runs with little worry for developers about the infrastructure. Not recommended for "Production" use by AWS
+Select a platform for your code, upload it (zip file including the .config files in the .ebextensions folder) and it runs with little worry for developers about the infrastructure. Not recommended for "Production" use by AWS
 * Based on CloudFormation
 * Use S3 if application code exceeds 512MB
 * Provisions
@@ -491,17 +491,17 @@ Select a platform for your code, upload it (zip file including .ebextensions) an
     * Monitoring
     * Blue / Green deployments available
     * Security to rotate RDS passwords
-    * Supports docker deployments for custom application
+    * Supports docker deployments for custom applications
 * Environments supported
     * Java, .NET, PHP, Node.js, Python, Ruby, Go and Docker
 
 ## Security Token Service
 Provides limited temporary access to AWS resources
-* Via federation typicall Active Directory
+* Via federation typically Active Directory
 * No IAM user needed
 * Uses SAML
 * Identity broker - Service that allows you to take identity from point A and federate or join it to point B
-* Identity store - think AD, Facebook or Google login stores
+* Identity store - think Active Directory, Facebook or Google login stores
 * Identities - user of a service
 Provides
 * Access key
@@ -514,22 +514,22 @@ Sequence of events
 ## CloudFront Content Delivery Network
 Content distribution network (CDN) that makes web / video content load faster by providing a cache closer to the user
 * Edge location is the location where the content is cached. Separate from regions and AZ
-* Origin is all the files that the CDN will distribute. Can be S3 bucket, EC2 instances, ELB instance, Route53 or non aWS file store
+* Origin is all the files that the CDN will distribute. Can be S3 bucket, EC2 instances, ELB instance, Route53 or non AWS file store
 * Distribution is the name given to a collection of Edge locations
 * Edge locations can be written to (process uploads)
 * Objects are cached for a TTL
 * Cache can be cleared / invalidated but there is a charge
 * Origin can be a folder in an S3 bucket, EC2, ELB
-* S3 buckets do not have to be public and can limit access to just the distribution with OAI
+* S3 buckets do not have to be public and can limit access to just the distribution with Origin Access Identity (OAI)
 * All HTTP methods are supported via the distribution including PUT and POST
 * Restrict view access via using signed URLs and signed cookies
 * Can further protect using WAF (Web Application Firewall)
 * CNAMES can be specified
-* Use Origin Access Identity (OAI) to access S3 origin and prevent everything else from accessing S3
+* Use Origin Access Identity (OAI) to access S3 origin and prevent anything else from accessing S3
     * Signed URLs
     * Signed Cookies
 * SSL can be a custom certificate
-* Content can be restricted by Geography
+* Content can be restricted by geography
 * Types of distributions
     * RTMP / RTP for video streaming
     * Static website hosting
@@ -564,7 +564,7 @@ Domain Name System (DNS) translates IP addresses to human readable friendly name
 * CNAME records convert to another name which can then be converted to an IP address
 * Time to Live (TTL) is the time the DNS record will be cached for. Reduce the TTL to propagate changes quickly
 * Alias records can be used with naked domain names and CNAME records cannot e.g. m.example.com can have an ALIAS of example.com but not a CNAME
-* Alias records are better / faster because AWS automatically reflects ELB IP address changes
+* Alias records are better / faster because AWS automatically reflects ELB and other service IP address changes
 * Alias records can point directly to AWS resources by name and automatically gets updated
 * Uses health checks to determine if your application is healthy and use that in routing traffic
 
@@ -582,7 +582,7 @@ Traffic flow visual editor allows you to create different policies and version t
 * Weighted Routing
     * Returns the IP address response based on a weighted / fractional value specified
     * Multiple records
-    * Blue / Green deployments to send fractional amounts or traffick
+    * Blue / Green deployments to send fractional amounts of traffic
 * Latency Routing
     * Records created per region
     * DNS query determines which regions have records and which region has the lowest latency for the requester
@@ -632,7 +632,7 @@ Traffic flow visual editor allows you to create different policies and version t
 * Restores
     * Creates a new database with new name
 * Encryption at rest with KMS
-    * To encrypt copy the snapshot with the encryption enabled then restore the snapshot to a new database
+    * To encrypt, copy the snapshot with the encryption enabled then restore the snapshot to a new database
 * Replication
     * Multi-AZ
         * Replicates the database synchronously to another AZ
@@ -643,7 +643,7 @@ Traffic flow visual editor allows you to create different policies and version t
         * Single endpoint name (see automatic name move)
         * Automated backups are taken from the standby
         * Must be in the same region
-        * Standby cannot be used for as the engine is inactive
+        * Standby cannot be used as the engine is inactive
         * Upgrades take place on the primary instance
     * Read replicas
         * Replicated asynchronously
@@ -687,7 +687,7 @@ Online Analytical Processing (OLAP / Data Warehousing) to analyze massive amount
 * Charged for compute nodes, data transfer and backup
 * Encrypted in transit via SSL
 * Encrypted at rest with KMS or CloudHSM keys
-* Loaded from S3, EMR, DynamoDB
+* Loaded from S3, Elastic Map Reduce, DynamoDB
 * Handles own keys or via KMS
 * Does not require indexes
 * Operates in a single AZ
@@ -726,7 +726,7 @@ Automatically starts and scales up to application needs and is good for infreque
 
 ## Simple Queuing Service (SQS)
 Distributed queue system for message awaiting processing (always a pull based system). Used for application integration
-* Great way to decouple applications components
+* Great way to decouple application components
 * Messages can contain from 1 byte up to 256KB of data
 * Messages can stay from 1 minute to 14 days (default is 4 days)
 * Visibility timeout is the amount of time a message is hidden from the queue after being picked up for processing
@@ -745,7 +745,7 @@ Distributed queue system for message awaiting processing (always a pull based sy
 Coordinates work across distributed application components
 * Workers (can be human) are programs that interact with SWF to get tasks, process received tasks and return results
     * Tasks are assigned only once and never duplicated
-* Deciders are programs that control the coordination of tasks and scheduling accoring to the application logic
+* Deciders are programs that control the coordination of tasks and scheduling according to the application logic
 * Workflow starters initiate the workflow
 * Workflows are scoped in a domain for isolation from other tasks and executions within the same account
 * Maximum workflow duration is 1 year measured in seconds
@@ -770,7 +770,7 @@ Used to automate the provisioning of resources in AWS
     * Outputs are exported from the current stack for import into other stacks
     * Mappings map keys to values for use like a lookup table
     * Resources define what to provision
-    * Conditions determine where a resources are created and with which attributes
+    * Conditions determine where resources are created and with which attributes
 
 ## OpsWorks
 * Orchestration service using Chef or Puppet
@@ -818,7 +818,7 @@ Collecting, processing and analyzing streaming data generated continuously from 
 * Great way to bring big data (news logs, social media feeds) into the AWS cloud for consumption by RedShift for business intelligence or Elastic Map Reduce for big data processing
 * Course services
     * Streams
-        * 24 hour default to seven day (168 hours)  retention
+        * 24 hour default to seven day (168 hours) retention
         * Uses shards
         * Lots of consumers
         * Consumers have to be manually added
@@ -826,7 +826,7 @@ Collecting, processing and analyzing streaming data generated continuously from 
     * Firehose
         * No data retention
         * Cheaper
-        * Analysed and or sent to another device
+        * Analysed and or sent to another service
         * Sends data to S3
         * No need to worry about consumers
         * No shards
@@ -880,9 +880,9 @@ Build, test and deploy applications quickly using containers
     * Access to EC2 for ECS is allowed
 
 ## Workspaces
-AWS virtual desktop infrastructure integrated with active directory for authentication
+AWS virtual desktop infrastructure integrated with Active Directory for authentication
 * Accessible from Windows, PC, iPAD, etc.
-* Windows 7
+* Windows 10 or Amazon Linux 2
 * Can be personalized
 * Local administrator available
 * Persistent
@@ -891,7 +891,7 @@ AWS virtual desktop infrastructure integrated with active directory for authenti
 
 ## Active Directory Integration
 * SAML authentication supported
-* ADFS -> AD -> SAML -> AssumeRolewithSAML -> Teporary credentials assigned
+* ADFS -> AD -> SAML -> AssumeRolewithSAML -> Temporary credentials assigned
 
 ## AWS Organizations (All features or consolidated billing)
 Account management service that enables you to consolidate multiple AWS accounts to centrally manage them via policies
@@ -981,7 +981,7 @@ Account management service that enables you to consolidate multiple AWS accounts
     * Transparent assignment of cost for clear expenditure allocation
     * Use managed services to reduce cost of ownership
     * Trade capital expense for operating expense
-    * Benefit from the economies of scaale (in short use the cloud)
+    * Benefit from the economies of scale (in short use the cloud)
     * Stop spending on data center operations (see economies of scale)
     * Definition
         * Match supply to demand (serverless, autoscaling)
