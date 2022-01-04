@@ -471,6 +471,18 @@ User to archive (backup) data with paid retrieval
 * Super cheap
 * Retrieval time of 12 hours
 
+## Athena
+Interactive query service that makes it easy to analyze data in Amazon S3 using standard SQL. Simply point to your data in Amazon S3, define the schema, and start querying using standard SQL.
+* Serverless
+* Process unstructured, semi-structured and unstructured data
+    * CSV, JSON, Avro, Apache Parquet and Apache ORC
+* Integrates with QuickSight for visualization
+* Best for when data is in S3 and you do not want to manage infrastructure
+
+## Glue
+Serverless data integration service that makes it easy to discover, prepare, and combine data for analytics, machine learning, and application development
+* Supports data in other services e.g. Aurora, RDS MySQL, RDS Oracle, RDS PostgreSQL, RDS SQL Server, RedShift, DynamoDB and S3
+
 ## Storage Gateway
 Connects an on-premises software appliance (Virtual Machine supporting VMware ESXi or Microsoft Hyper-V) with cloud-based storage.
 * Gateway type
@@ -510,6 +522,30 @@ Provides
 * Token
 Sequence of events
 * User -> Application -> Identity Broker -> Identity Store (LDAP) -> AWS STS -> Application -> AWS Service -> AWS IAM -> Temporary access to AWS service
+
+## GuardDuty
+Threat detection service that continuously monitors AWS accounts, the data stored in S3 and workloads for malicious activity using machine learning, anomaly detection, threat intelligence 
+* Utilizes data from the services below without you enabling them
+    * CloudTrail Events
+    * VPC Flow Logs
+    * DNS Logs
+* Starts working immediately
+* No performance penalty
+* Does not retain events or logs
+* Detects
+    * Reconnaissance e.g. port scanning
+    * Instance compromise
+    * Account compromise
+    * S3 bucket compromise
+* Trigger automated actions via Lambda
+* Option to provide your own threat intelligence
+
+## Macie
+Discover and protect sensitive data in S3 by classifying the data and security along with the access controls in place then uses pattern matching and machine learning to detect sensitive data. Results are sent to Amazon EventBridge (CloudWatch Events)
+
+## Inspector
+Automated vulnerability management service that continually scans EC2 and container workloads for software vulnerabilities and unintended network exposure
+* Requires SSM Agent for EC2 software scanning
 
 ## CloudFront Content Delivery Network
 Content distribution network (CDN) that makes web / video content load faster by providing a cache closer to the user
