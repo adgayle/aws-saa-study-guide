@@ -72,6 +72,10 @@ Amazon Elastic Compute Cloud reduces the time required to obtain and boot new se
     * You commit to using $X/hour of compute and this gets you a price lower than On Demand
     * Applies to a specific instance family
     * No region restrictions
+    * Three types
+        * Compute savings plan applies to EC2, Lambda and Fargate regardless of family, size, AZ, region, OS or tenancy
+        * EC2 instance savings plan applies to EC2 but a specific family and region
+        * SageMaker savings plan just for sagemaker
 
 ### EBS Backed
 * Persistent
@@ -108,6 +112,9 @@ Amazon Elastic Compute Cloud reduces the time required to obtain and boot new se
     * Used to separate instances of the same application on different physical hardware
     * Can span multiple AZs
     * Cannot neither be merged nor moved into a new placement group
+* Partition placement groups
+    * Spreads instances across logical partitions such that the groups of instances in one partition do not share underlying hardware with groups of instances in a different partition
+    * Useful for partitioned workloads e.g. Hadoop, Cassandra, Kafka
 
 ## Amazon Machine Images (AMI)
 Region specific templates from which to generate new EC2 instances
@@ -115,6 +122,10 @@ Region specific templates from which to generate new EC2 instances
 * Can create from running or stopped instances
 * AWS, community or marketplace AMI are available
 * Can be shared with other accounts or made public
+
+## Resource Manager
+Allows you to share resources with other individual accounts that are in an Organization or Organization Unit (OU). For Example
+* Dedicated hosts
 
 ## Auto Scaling Groups (ASG)
 * Launch configuration specifies the AMI, Instance size, IAM role, bootstrap script, etc. Answers the question of what each EC2 instance launched should look like
@@ -128,6 +139,8 @@ Region specific templates from which to generate new EC2 instances
 * Health checks can be run against the EC2 instances or ELB (application checks)
 * ASG uses the specified launch configuration when starting new EC2 instances
 * Cool down period ensures that the autoscaling policy does not take further action during this time window to prevent thrashing
+* Use lifecycle hooks to put instances in a wait state so you can perform custom activities before terminating an instance. Default time is 1 hour
+* You can specify a base number of EC2 instances using On-Demand or Reserved Instances and then scale out using Spot instances
 
 ## EBS
 Elastic Block Storage that is attached to EC2 instances
@@ -250,7 +263,17 @@ Load Balancers spread load across resources to provide services. The ELB does no
 * Thousands of concurrent connections
 * Block based storage
 * Read after write consistency
-* EC2 security group must allow NFS access to the EFS security group to mount the shared volume
+* EC2 security group must allow NFS access to the EFS security group to mount the shared 
+
+## FSx for Windows File Server
+Provides fully managed shared storage built on Windows server
+* Replaces on premise Windows File Servers using the FSx File Gateway for low latency access
+
+## FSx for Lustre
+Provides fully managed shared storage with the scalability and performance of the popular Lustre file syste
+* Useful for machine learning and high performance computing
+
+
 
 ## Lambda
 Cheap, serverless, and autoscaling compute service where you upload your code and create functions as a service. Handles scaling, operating systems, patching, etc. This is event driven or in response to HTTP requests
@@ -463,9 +486,9 @@ User to archive (backup) data with paid retrieval
 * 30 days after IA or 1 day after S3
 * Takes minutes to hours to retrieve data
 * Retrieval types
-    * Expedited
-    * Standard
-    * Bulk
+    * Expedited (1 - 5 minutes)
+    * Standard / Vault Lock (3 - 5 hours)
+    * Bulk (5 - 12 hours)
 
 #### S3 - Glacier Deep Archive
 * Super cheap
@@ -491,6 +514,9 @@ Connects an on-premises software appliance (Virtual Machine supporting VMware ES
         * Stored volumes 1-16TB: Primary data on-premise
         * Cached volumes 1-32TB: Stored on AWS cached on-premise
     * Tape Gateway (VTL): Back up data to S3 and archive to Glacier using existing tape rotation process
+
+## Datasync
+Secure, online service that automates and accelerates moving data between on premises and AWS storage servics. Can copy between NFS, SMB, Hadoop, Snowcone, S3, EFS, FSx and FSx Lustre
 
 ## Elastic Beanstalk
 Select a platform for your code, upload it (zip file including the .config files in the .ebextensions folder) and it runs with little worry for developers about the infrastructure. Not recommended for "Production" use by AWS
@@ -570,6 +596,11 @@ Content distribution network (CDN) that makes web / video content load faster by
     * RTMP / RTP for video streaming
     * Static website hosting
 * Lambda@Edge allows you to pass the select requests and responses to Lambda
+
+## Global Accelerator
+Improves the performance of user traffic by up to 60% by using the AWS global network infrastructure
+* Customer is provide 2 global static IP addresses to serve as entry points to their applications
+* Automatically re-routes the traffic to the nearest healthy available application endpoint
 
 ## Snowball
 Used to move large amounts of data in and out of AWS (mostly S3 and Glacier).  Replaced the Import/Export service). Convenient way to tranfer 100 TB to S3 in a week or less.
@@ -798,6 +829,9 @@ Used to automate the provisioning of resources in AWS
 * Templates larger than 51,200 bytes have to be loaded from S3 not direct upload
 * NestedStacks allows you to break larger templates into smaller ones
 * A template MUST have at least 1 resource
+* Supports drift detection at the StackSet
+* Does not check drift of default values
+* AWS Config also has a rule to help detect drift in StackSets
 * Components of a CloudFormation Template
     * Metadata extra information about template
     * Description describe the template purpose
