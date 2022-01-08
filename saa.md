@@ -125,7 +125,19 @@ Region specific templates from which to generate new EC2 instances
 
 ## Resource Manager
 Allows you to share resources with other individual accounts that are in an Organization or Organization Unit (OU). For Example
-* Dedicated hosts
+* Dedicated hosts, transit gateways, subnets, license configurations, etc.
+* Allows sharing of resources across the accounts in an OU
+* Eliminates duplicate resources across accounts leading to optimized costs
+
+## License Manager
+Manage software licenses and set rules that mirror the terms of your licensing agreement with the vendor so you can remain compliant
+
+## Service Catalog
+Allows organizations to create and manage catalogs of IT services that are approved for use.
+* Presents users with a simply portal from which to get an IT service
+* Integrates with popular ITSM software
+* Endpoint available in VPC provided by PrivateLink
+* Create a product portfolio to share with other AWS accounts
 
 ## Auto Scaling Groups (ASG)
 * Launch configuration specifies the AMI, Instance size, IAM role, bootstrap script, etc. Answers the question of what each EC2 instance launched should look like
@@ -791,6 +803,20 @@ Caches are optimized for fast retrieval with the trade off that the data is not 
 ### Aurora Serverless
 Automatically starts and scales up to application needs and is good for infrequent, intermittent and unpredictable workloads
 
+### Database Migration Service
+Helps to migrate database to AWS quickly and securely by allowing the source database to remain fully operational during the migration.
+* Replication can be one time or ongoing
+* Homogenious replication is supported X to X
+* Heterogenous replication is supported in some cases so X to Y
+* Replication to S3 to build data lakes
+* Replication to RedShift to build data warehouses
+* DMS can handle data up to 10 TB and MongoDB
+* Schema Conversion Tool (SCT)
+    * Works with the DSM to support the replication
+    * Supports the schema conversion required for heterogenous migrations
+    * Handles larger migrations and data warehouses
+    * Does not support ongoing replication
+
 ## Simple Queuing Service (SQS)
 Distributed queue system for message awaiting processing (always a pull based system). Used for application integration
 * Great way to decouple application components
@@ -978,7 +1004,8 @@ Account management service that enables you to consolidate multiple AWS accounts
 * Paying account for billing only no resource deployment
 * Enable monitoring on the paying account for billing alerts to include all linked account data
 * Manage all features
-* Organizations unites which you can apply policies to
+* Groupd accounts into Organizational Units (OU) which you can then apply policies to. Typically the separation is based on infrastructure access and security
+* **Control Tower** can help you to get a Landing Zone setup quickly with Organizations with **Config** rules and service control policies to provide guardrails in each account
 
 ## AWS Support
 * Basic
